@@ -1,3 +1,10 @@
+//============================================================================
+// Name        : value.h
+// Author      : Piotr Wasilewski
+// Version     : 1
+// Copyright   : All rights reserved
+// Description : Projekt licznika rowerowego
+//============================================================================
 #ifndef VALUE_H
 #define VALUE_H
 
