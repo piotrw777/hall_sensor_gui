@@ -4,9 +4,7 @@
 
 using namespace std;
 /*
- *
- *
- * template <typename Typ1, size_t N1, typename Typ2, size_t N2, typename Typ3, size_t N3>
+template <typename Typ1, size_t N1, typename Typ2, size_t N2, typename Typ3, size_t N3>
 class Thread_Inc : public QObject
 {
     friend class MainWindow;
@@ -27,12 +25,10 @@ private slots:
 };
 */
 
-Thread_Inc::Thread_Inc() :
-    threadA(), threadB(), threadC()
+Thread_Inc::Thread_Inc() : threadA(), threadB(), threadC({16,20,21, 23, 24, 25, 15})
 {
     cout << "Pracuje konstruktor domyslny dla Thread_Inc\n";
 }
-
 
 void Thread_Inc::startOrstopThreadA()
 {

@@ -1,19 +1,17 @@
 #ifndef THREAD_H
 #define THREAD_H
+
+#include <iostream>
 #include <QObject>
 #include <QThread>
-
+#include "led_kit.h"
 #include "led.h"
 
-class Thread : public QThread
+class ThreadBase : public QThread
 {
     Q_OBJECT
 public:
-    Thread();
-    Thread(int pin);
-
-    void stop();
-    void run();
+    ThreadBase(){ running = false; cout << "Pracuje konstruktor domyslny dla ThreadBase\n";};
     bool is_active(){ return running; };
 
 //public slots:
@@ -22,9 +20,40 @@ public:
 //public: signals:
 //    void valueChanged(int val);
 
-private:
-    led leddy;
+protected:
     volatile bool running;
 };
 
+template <typename Typ, size_t N>
+class Thread : public ThreadBase {
+
+private:
+    Typ elem;
+
+public:
+    Thread() : elem(N) {cout << "Pracuje konstruktor klasy Thread\n";}
+    ~Thread(){ elem.off(); }
+    void stop()  {
+        if(running == false)
+        {
+            return;
+        }
+        running = false;
+        elem.off();
+    }
+    void run()  {
+        if(running == true)
+        {
+            cout << "Watek pracuje\n";
+            return;
+        }
+        cout << "Wlanczam watek\n";
+        running = true;
+        elem.on();
+    }
+};
+
+
+//array<led, N> leds  = {16,20,21, 23, 24, 25, 15};
+//leds_state<7> kit;
 #endif // THREAD_H

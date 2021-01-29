@@ -3,7 +3,6 @@
 #define COMMENTS_LED 0
 
 #include "element.h"
-#include "templates.h"
 
 class led : public element {
 private:
@@ -47,8 +46,6 @@ public:
             exit(1);
         }
     }
-    template <size_t N>
-    friend void start_blink(const array<led, N> &led, leds_state<N> &kit, double (*f)(double ),int );
 };
 
 #endif // LED.H

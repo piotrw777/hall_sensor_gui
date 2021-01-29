@@ -2,14 +2,13 @@
 #include "thread.h"
 
 using namespace std;
-template <typename Typ, size_t N>
-Thread<Typ, N>::Thread() : elem(N)
+/*
+ThreadBase::ThreadBase()
 {
-    cout << "Pracuje konstruktor domyslny dla Thread\n";
+    cout << "Pracuje konstruktor domyslny dla ThreadBase\n";
 }
 
-template <typename Typ, size_t N>
-void Thread<Typ, N>::run()
+void ThreadBase::run()
 {
     if(running == true)
     {
@@ -18,17 +17,16 @@ void Thread<Typ, N>::run()
     }
     cout << "Wlanczam watek\n";
     running = true;
-    leddy.on();
 }
 
-template <typename Typ, size_t N>
-void Thread<Typ, N>::stop()
+
+void ThreadBase::stop()
 {
     if(running == false)
     {
         return;
     }
     running = false;
-    leddy.off();
+    elem.off();
 }
-
+*/

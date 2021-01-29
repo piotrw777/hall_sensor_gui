@@ -2,6 +2,8 @@
 #define THREAD_INC_H
 #include "thread.h"
 #include "led.h"
+#include "buzzer.h"
+#include "led_kit.h"
 
 class Thread_Inc : public QObject
 {
@@ -11,9 +13,9 @@ public:
     Thread_Inc();
 
 private:
-    Thread threadA;
-    Thread threadB;
-    Thread threadC;
+    Thread<led, 12> threadA;
+    Thread<buzzer, 27> threadB;
+    Thread<led_kit<7> > threadC;
 
 private slots:
     void startOrstopThreadA();

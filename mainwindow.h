@@ -30,10 +30,14 @@ private slots:
 
 void on_pushButton_2_clicked();
 
+void on_pushButton_led_clicked();
+
+void on_pushButton_kit_clicked();
+
 private:
     Ui::MainWindow *ui;
     Thread_Inc thread_inc;
-
+    led yellow;
 };
 
 #endif // MAINWINDOW_H

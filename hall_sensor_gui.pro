@@ -39,8 +39,9 @@ SOURCES += \
 HEADERS += \
     buzzer.h \
     hall_sensor.h \
-        mainwindow.h led.h element.h templates.h softPwm.h \
-        rubbish.h \
+    led_kit.h \
+    leds_state.h \
+        mainwindow.h led.h element.h softPwm.h \
     thread.h \
     thread_inc.h \
         value.h \
