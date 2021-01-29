@@ -30,6 +30,8 @@ SOURCES += \
     hall_sensor.cpp \
         main.cpp \
         mainwindow.cpp \
+    thread.cpp \
+    thread_inc.cpp \
         value.cpp \
     timer.cpp \
     wheel.cpp
@@ -39,6 +41,8 @@ HEADERS += \
     hall_sensor.h \
         mainwindow.h led.h element.h templates.h softPwm.h \
         rubbish.h \
+    thread.h \
+    thread_inc.h \
         value.h \
     timer.h \
     wheel.h

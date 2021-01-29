@@ -8,8 +8,9 @@
 #include <QFile>
 #include <QFile>
 #include <QTextStream>
-#include "value.h"
+#include "led.h"
 #include "element.h"
+#include "thread_inc.h"
 
 class hall_sensor;
 
@@ -31,11 +32,7 @@ void on_pushButton_2_clicked();
 
 private:
     Ui::MainWindow *ui;
-    value speed_value;
-    value rpm_value;
-    value distance_value;
-    value magnet_counter;
-    hall_sensor *a3144;
+    Thread_Inc thread_inc;
 
 };
 

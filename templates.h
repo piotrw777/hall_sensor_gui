@@ -5,12 +5,15 @@
 #define TEMPLATES
 #include <iostream>
 #include <array>
-using namespace std;
+#include "softPwm.h"
+#include "wiringPi.h"
 
+using namespace std;
 
 class led;
 
 //funkcje odwzorujące przedział [0,100] -> [0,100]
+/*
 double scale_0(double k) {
     return k;
 }
@@ -18,15 +21,15 @@ double scale_0(double k) {
 double scale_1(double k) {
     return k*k/100;
 }
+*/
+double scale_0(double k);
+double scale_1(double k);
 
 template <size_t K>
 class leds_state;
 
 template <size_t N>
-void start_blink(const array<led, N> &led, leds_state<N> &kit, double (*f)(double ) = scale_1, int = 100);
-
-template <size_t N>
-void start_blink(const array<led, N> &leds, leds_state<N> &kit, double (*scale_function)(double k), int delay_time) {
+void start_blink(const array<led, N> &leds, leds_state<N> &kit, double (*scale_function)(double k) = scale1, int delay_time = 100) {
     for(size_t k = 0; k < N; k++) {
         softPwmWrite(leds[k].pin, scale_function( kit.Power(k)));
     }
