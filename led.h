@@ -48,8 +48,7 @@ public:
         }
     }
     template <size_t N>
-    friend void start_blink(const array<led, N> &led, leds_state<N> &kit, double (*f)(double ) , int );
-
+    friend void start_blink(const array<led, N> &led, leds_state<N> &kit, double (*f)(double ),int );
 };
 
 #endif // LED.H

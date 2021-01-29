@@ -1,9 +1,5 @@
 //============================================================================
 // Name        : hall.cpp
-// Author      : Piotr Wasilewski
-// Version     : 1
-// Copyright   : All rights reserved
-// Description : Projekt licznika rowerowego
 //============================================================================
 
 #include <iostream>

@@ -1,3 +1,10 @@
+//============================================================================
+// Name        : wheel.h
+// Author      : Piotr Wasilewski
+// Version     : 1
+// Copyright   : All rights reserved
+// Description : Projekt licznika rowerowego
+//============================================================================
 #ifndef WHEEL_H
 #define WHEEL_H
 
@@ -12,6 +19,5 @@ public:
     double get_perimeter() {return perimeter;}
     inline double velocity(const double &t) { return (perimeter * 10)/t; } //w m/s
 };
-
 
 #endif // WHEEL_H

@@ -1,3 +1,6 @@
+//============================================================================
+// Name        : hall_sensor.h
+//============================================================================
 #ifndef HALL_SENSOR_H
 #define HALL_SENSOR_H
 
@@ -17,7 +20,6 @@ public:
     bool detect() {
         return !digitalRead(pin);
     }
-
     void measure_speed(wheel &vehicle, value &magnet_counter, int sooze_time = 2000, int delay_time = 1);
 };
 
