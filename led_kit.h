@@ -1,15 +1,17 @@
 #ifndef LED_KIT_H
 #define LED_KIT_H
-#include "leds_state.h"
+
 #include "led.h"
 #include <softPwm.h>
+#include <unistd.h>
 #include <wiringPi.h>
 
-template <size_t N>
-class led_kit : public leds_state<N>
+
+class led_kit : public leds_state
 {
+
 private:
-    array<led, N> leds;
+    vector<led> leds;
 
     double scale_0(double k) {
         return k;
@@ -20,10 +22,10 @@ private:
     }
 
 public:
-    led_kit(array<int, N> arr)
+    led_kit(int N, vector<int> vec) : leds_state(N)
     {
-        leds = arr;
-        for(int k = 0; k < N; k++) {
+        for(int k = 0; k < K; k++) {
+            leds.push_back(vec[k]);
             leds[k].prepare_soft_pwm();
         }
     }
@@ -31,21 +33,20 @@ public:
     void off();
 };
 
-template <size_t N>
-void led_kit<N>::on()
+void led_kit::on()
 {
-    for(size_t k = 0; k < N; k++) {
-        softPwmWrite(leds[k].pin, scale_function( Power(k)));
+    for(int k = 0; k < K; k++) {
+        softPwmWrite(leds[k].get_pin(), scale_1( Power(k) ));
     }
     next_state();
     delay(100);
 }
 
-template <size_t N>
-void led_kit<N>::off()
+
+void led_kit::off()
 {
-    for(size_t k = 0; k < N; k++) {
-        softPwmWrite(leds[k].pin, 0);
+    for(int k = 0; k < K; k++) {
+        softPwmWrite(leds[k].get_pin(), 0);
     }
 }
 

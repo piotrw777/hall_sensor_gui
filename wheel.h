@@ -15,9 +15,13 @@ class wheel {
     long double perimeter; //w centymetrach
 
 public:
+    wheel(){}
     wheel(double radius) : radius(radius){perimeter = 2*pi*radius;}
-    double get_perimeter() {return perimeter;}
-    inline double velocity(const double &t) { return (perimeter * 10)/t; } //w m/s
+    wheel(const wheel &w) {
+        radius = w.radius;
+    }
+    double get_perimeter() const{return perimeter;}
+    inline double velocity(const double &t) const { return (perimeter * 10)/t; } //w m/s
 };
 
 #endif // WHEEL_H

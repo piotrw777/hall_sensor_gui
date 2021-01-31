@@ -3,7 +3,7 @@
 #include "thread.h"
 #include "led.h"
 #include "buzzer.h"
-#include "hall_sensor.h"
+#include "led_kit.h"
 
 class Thread_Inc : public QObject
 {
@@ -11,11 +11,11 @@ class Thread_Inc : public QObject
     Q_OBJECT
 public:
     Thread_Inc();
-    ~Thread_Inc(){exit();}
+
 private:
     Thread<led> threadA;
     Thread<buzzer> threadB;
-    Thread<hall_sensor> threadC;
+    Thread<led > threadC;
 
 private slots:
     void startOrstopThreadA();

@@ -8,8 +8,8 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = hall_sensor_gui
-TEMPLATE = app
+#TARGET = hall_sensor_gui
+#TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -30,7 +30,6 @@ SOURCES += \
     hall_sensor.cpp \
         main.cpp \
         mainwindow.cpp \
-    thread.cpp \
     thread_inc.cpp \
         value.cpp \
     timer.cpp \
@@ -39,9 +38,7 @@ SOURCES += \
 HEADERS += \
     buzzer.h \
     hall_sensor.h \
-    led_kit.h \
-    leds_state.h \
-        mainwindow.h led.h element.h softPwm.h \
+        mainwindow.h led.h element.h \
     thread.h \
     thread_inc.h \
         value.h \

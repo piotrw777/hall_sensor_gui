@@ -5,63 +5,112 @@
 #include "timer.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <iostream>
+#include <QDebug>
 
 using namespace std;
 
-void hall_sensor::measure_speed(wheel &vehicle, value &magnet_counter, int sooze_time, int delay_time) {
-    double t;
-    int magnet_c = 0; //licznik
+
+inline double round_2(double x)
+{
+    return static_cast<long long>(x * 100)/100.0;
+}
+hall_sensor::hall_sensor(QObject *parent) : QObject(parent)
+{
+    pin = 18;
+    pinMode(pin,INPUT);
+    pi = 3.1415926535;
+    radius = 33; //in cm
+    perimeter = 2*pi*radius;
+    sooze_time = 2000;
+    delay_time = 1;
+    running = false;
+}
+
+void hall_sensor::on()  {
+    running = true;
+    double t; //in miliseconds
+    int magnet_c = 0; //licznik obrotow
     timer t1;
-    timer t_average;
     timer t_off;
+    timer t_abs;
+    double prev_sec = 0;
+    double t_emit = 0;
+    double t_average = 0;  //in miliseconds
+
     bool stat = false;
     bool no_magnet;
+    bool is_moving = false;
     double speed;
-    long double distance(0);
+    long double distance(0); //in cm
     int rpm;
-    //cout << "Measure speed start\n";
+
+    cout << "Measure speed start";
     while(1) {
+
+        if(t_abs.read_time()-prev_sec >= 100 && is_moving == true) {
+            emit time_trip_change(round_2(t_average/1000));
+            prev_sec = t_abs.read_time();
+        }
+        if(running == false) break;
+
         if(this->detect()) {
 
             //pierwsza detekcja
             if(stat == 0) {
+
                 t1.start();
+                t_abs.start();
                 stat = 1;
                 ++magnet_c;
                 no_magnet = false;
-                //out << "FIRST MAGNET DETECTION" << endl;
+                qDebug() << "FIRST MAGNET DETECTION" << endl;
                 continue;
             }
             //po przerwie
             if(no_magnet == true) {
                 no_magnet = false;
                 t1.stop(t);
+
                 //przerwa w jeździe
                 if(t > sooze_time) {
                     t1.start();
-                    //out << "Magnet detected " << ++magnet_c << " times. " << endl;
-                    magnet_counter.setValue(++magnet_c);
-
-                    return; //aby zastopować program
+                    qDebug() << "Magnet detected " << ++magnet_c << " times. " << endl;
                     continue;
                 }
-                speed = vehicle.velocity(t);
+                is_moving = true;
+                t_average += t;
+                t_emit += t;
+                speed = velocity(t);
                 rpm = static_cast<int>(60000.0/t);
-                distance += vehicle.get_perimeter();
+                distance += get_perimeter();
+
+                if(t_emit > 1500) {
+                    t_emit = 0;
+                    emit average_speed_change(distance * 36 / t_average);
+                    emit distance_change(distance/100000);
+                    emit rpm_change(rpm);
+                    emit speed_change(speed * 3.6);
+                }
 
                 //komunikat na ekran
-                magnet_counter.setValue(++magnet_c);
 
-                //cout << "Magnet detected " << ++magnet_c << " times. " << t/1000 <<" s." << endl <<
-                //"Velocity: " << speed << " m/s  "<< speed * 3.6 <<" km/h RPM: " <<
-                //rpm << endl;
-
+                qDebug() << "Magnet detected " << ++magnet_c << " times. " << t/1000 <<" s." << endl <<
+                "Velocity: " << speed << " m/s  "<< speed * 3.6 <<" km/h RPM: " <<
+                rpm << endl;
                 t1.start();
             }
         }
         else {
-            no_magnet = true;
-            t_off.start();
+            if(no_magnet == false) {
+                t_off.start();
+            }
+            if(t_off.is_on() == true && t_off.read_time() > 2000) {
+                emit speed_change(0);
+                emit rpm_change(0);
+                is_moving = false;
+            }
+            no_magnet = true;          
         }
         delay(delay_time);
     } //end while

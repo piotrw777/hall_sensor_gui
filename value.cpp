@@ -17,6 +17,6 @@ void value::setValue(int newValue)
     if(newValue != myValue)
     {
         myValue = newValue;
-        emit valueChanged(newValue);
+        emit valueChanged(myValue);
     }
 }

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <QObject>
 #include <QThread>
+#include "led_kit.h"
 #include "led.h"
 
 class ThreadBase : public QThread
@@ -13,6 +14,12 @@ public:
     ThreadBase(){ running = false; cout << "Pracuje konstruktor domyslny dla ThreadBase\n";};
     bool is_active(){ return running; };
 
+//public slots:
+//    void setValue(int val);
+
+//public: signals:
+//    void valueChanged(int val);
+
 protected:
     volatile bool running;
 };
@@ -20,24 +27,20 @@ protected:
 template <typename Typ>
 class Thread : public ThreadBase {
 
+private:
+    Typ elem;
+
 public:
-    Typ *elem;
-    Thread() : elem(nullptr) {cout << "Pracuje konstruktor klasy Thread\n";}
-
-    template<typename T>
-    Thread(T t) {elem = new Typ(t);}
-
-    template<typename T1, typename T2>
-    Thread(T1 t1, T2 t2) {elem = new Typ(t1, t2);}
-
-    ~Thread(){ elem->off(); delete elem;}
+    template <typename T>
+    Thread(T t) : elem(t) {cout << "Pracuje konstruktor klasy Thread\n";}
+    ~Thread(){ elem.off(); }
     void stop()  {
         if(running == false)
         {
             return;
         }
         running = false;
-        elem->off();
+        elem.off();
     }
     void run()  {
         if(running == true)
@@ -47,7 +50,7 @@ public:
         }
         cout << "Wlanczam watek\n";
         running = true;
-        elem->on();
+        elem.on();
     }
 };
 

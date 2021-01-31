@@ -1,11 +1,31 @@
 #include "thread_inc.h"
-#include "wheel.h"
-#include <QDebug>
 //#include "ui_mainwindow.h"
 #include <iostream>
 
-wheel bike(33);
-Thread_Inc::Thread_Inc() : threadA(12), threadB(27), threadC(nullptr)
+using namespace std;
+/*
+template <typename Typ1, size_t N1, typename Typ2, size_t N2, typename Typ3, size_t N3>
+class Thread_Inc : public QObject
+{
+    friend class MainWindow;
+    Q_OBJECT
+public:
+    Thread_Inc();
+
+private:
+    Thread<Typ1, N1> threadA;
+    Thread<Typ2, N2> threadB;
+    Thread<Typ3, N3> threadC;
+
+private slots:
+    void startOrstopThreadA();
+    void startOrstopThreadB();
+    void startOrstopThreadC();
+    void exit();
+};
+*/
+
+Thread_Inc::Thread_Inc() : threadA<int>(12), threadB<int>(27), threadC<int>(21)
 {
     cout << "Pracuje konstruktor domyslny dla Thread_Inc\n";
 }
@@ -42,12 +62,12 @@ void Thread_Inc::startOrstopThreadC()
 {
     if(threadC.is_active())
     {
-        qDebug() << "ThreadC stops\n";
+        cout << "ThreadC stops\n";
         threadC.stop();
     }
     else
     {
-        qDebug() << "ThreadC starts\n";
+        cout << "ThreadC starts\n";
         threadC.start();
     }
 }

@@ -20,9 +20,22 @@ int element::liczba_elementow = 0;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    thread_inc(), yellow(12)
+    thread_inc()
 {
+
     ui->setupUi(this);
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(speed_change(double)), ui->lcd_speed, SLOT(display(double)));
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(rpm_change(int)), ui->lcd_rpm, SLOT(display(int)));
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(distance_change(double)), ui->lcd_distance, SLOT(display(double)));
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(time_trip_change(double)), ui->lcd_time_trip, SLOT(display(double)));
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(average_speed_change(double)), ui->lcd_avg_speed, SLOT(display(double)));
+    thread_inc.startOrstopThreadA(); //yellow lamp
+    thread_inc.startOrstopThreadC(); //hall_sensor
 }
 
 MainWindow::~MainWindow()
@@ -30,34 +43,28 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-void MainWindow::on_pushButton_2_clicked()
-{
-    yellow.on();
-}
-
 void MainWindow::on_pushButton_led_clicked()
 {
-    if(ui->pushButton_led->text() == "Led On")
+    if(ui->pushButton_led->text() == "Led Off")
     {
-        ui->pushButton_led->setText("Led Off");
+        ui->pushButton_led->setText("Led On");
     }
     else
     {
-        ui->pushButton_led->setText("Led On");
+        ui->pushButton_led->setText("Led Off");
     }
     thread_inc.startOrstopThreadA();
 }
 
 void MainWindow::on_pushButton_kit_clicked()
 {
-    if(ui->pushButton_kit->text() == "Kit On")
+    if(ui->pushButton_kit->text() == "Buzzer On")
     {
-        ui->pushButton_kit->setText("Kit Off");
+        ui->pushButton_kit->setText("Buzzer Off");
     }
     else
     {
-        ui->pushButton_kit->setText("Kit On");
+        ui->pushButton_kit->setText("Buzzer On");
     }
     thread_inc.startOrstopThreadB();
 

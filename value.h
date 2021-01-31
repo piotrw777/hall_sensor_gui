@@ -9,12 +9,12 @@
 #define VALUE_H
 
 #include <QObject>
-class MainWindow;
+
 class value : public QObject
 {
     Q_OBJECT
 public:
-    friend class MainWindow;
+
     explicit value(QObject *parent = nullptr);
 
 signals:
@@ -25,7 +25,6 @@ public slots:
 
 private:
     int myValue;
-
 };
 
 #endif // VALUE_H

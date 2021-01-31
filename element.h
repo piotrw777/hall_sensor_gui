@@ -8,6 +8,7 @@
 #include <iostream>
 #include "wiringPi.h"
 #include "softPwm.h"
+#include <QObject>
 
 using namespace std;
 
@@ -15,6 +16,7 @@ class element {
 protected:
     int pin;
     static int liczba_elementow;
+    //element(){}
     element(int pin_): pin(pin_){
         #if(COMMENTS_ELEMENT == 1)
         cout << "Dziala konstruktor klasy element\n";

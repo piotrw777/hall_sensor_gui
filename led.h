@@ -15,7 +15,9 @@ public:
         #endif
         pinMode(pin_, OUTPUT);
     }
-
+    int get_pin() {
+        return pin;
+    }
     void off() const override {
         digitalWrite(pin, 0);
     }
