@@ -15,6 +15,10 @@ inline double round_2(double x)
 {
     return static_cast<long long>(x * 100)/100.0;
 }
+inline double round_1(double x)
+{
+    return static_cast<long long>(x * 10)/10.0;
+}
 hall_sensor::hall_sensor(QObject *parent) : QObject(parent)
 {
     pin = 18;
@@ -34,6 +38,7 @@ void hall_sensor::on()  {
     timer t1;
     timer t_off;
     timer t_abs;
+    timer t_avg;
     double prev_sec = 0;
     double t_emit = 0;
     double t_average = 0;  //in miliseconds
@@ -46,13 +51,12 @@ void hall_sensor::on()  {
     int rpm;
 
     cout << "Measure speed start";
-    while(1) {
+    while(running) {
 
-        if(t_abs.read_time()-prev_sec >= 100 && is_moving == true) {
-            emit time_trip_change(round_2(t_average/1000));
+        if(is_moving == true && t_abs.read_time()-prev_sec >= 100) {
+            emit time_trip_change(round_1(t_average/1000));
             prev_sec = t_abs.read_time();
         }
-        if(running == false) break;
 
         if(this->detect()) {
 
@@ -60,6 +64,7 @@ void hall_sensor::on()  {
             if(stat == 0) {
 
                 t1.start();
+                t_avg.start();
                 t_abs.start();
                 stat = 1;
                 ++magnet_c;
@@ -71,10 +76,13 @@ void hall_sensor::on()  {
             if(no_magnet == true) {
                 no_magnet = false;
                 t1.stop(t);
-
+                if(is_moving == false) {
+                    t_avg.resume();
+                }
                 //przerwa w jeździe
                 if(t > sooze_time) {
                     t1.start();
+                    t_avg.resume();
                     qDebug() << "Magnet detected " << ++magnet_c << " times. " << endl;
                     continue;
                 }
@@ -106,9 +114,13 @@ void hall_sensor::on()  {
                 t_off.start();
             }
             if(t_off.is_on() == true && t_off.read_time() > 2000) {
+                if(is_moving == true) {
+                    t_avg.pause();
+                }
                 emit speed_change(0);
                 emit rpm_change(0);
                 is_moving = false;
+
             }
             no_magnet = true;          
         }

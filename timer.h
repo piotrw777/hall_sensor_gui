@@ -34,7 +34,7 @@ public:
     void stop(T &t) {
         status = OFF;
         _end = chrono::steady_clock::now();
-        _time = chrono::duration_cast<chrono::milliseconds>(_end - _start).count();
+        _time += chrono::duration_cast<chrono::milliseconds>(_end - _start).count();
         t = _time;
     }
     void restart() {
