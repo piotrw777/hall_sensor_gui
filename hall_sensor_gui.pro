@@ -27,12 +27,11 @@ CONFIG += c++11
 
 SOURCES += \
     hall_sensor.cpp \
-    hall_sensor_kopia.cpp \
     led_state.cpp \
-        main.cpp \
-        mainwindow.cpp \
+    main.cpp \
+    mainwindow.cpp \
     thread_inc.cpp \
-        value.cpp \
+    value.cpp \
     wheel.cpp
 
 HEADERS += \
