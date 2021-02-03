@@ -2,4 +2,4 @@ pthread.h
 softPwm.h
 rubbish.h
 wiringPi.h
-*.user*
+*.user.*
