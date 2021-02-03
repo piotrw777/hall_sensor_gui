@@ -7,6 +7,7 @@
 #include "element.h"
 #include "wheel.h"
 #include <QObject>
+#include <QString>
 
 class hall_sensor : public QObject {
     Q_OBJECT
@@ -29,7 +30,7 @@ signals:
     void speed_change(double);
     void distance_change(double);
     void rpm_change(int);
-    void time_trip_change(double);
+    void time_trip_change(QString);
     void average_speed_change(double);
 
 public slots:

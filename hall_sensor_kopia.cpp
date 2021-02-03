@@ -1,13 +1,13 @@
 //============================================================================
 // Name        : hall_sensor.cpp
 //============================================================================
+/*
 #include "hall_sensor.h"
 #include "timer.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
 #include <QDebug>
-#include <QString>
 
 using namespace std;
 
@@ -40,8 +40,7 @@ void hall_sensor::on()  {
     timer t_off;
     timer t_abs;
     timer t_avg;
-    QString t_avg_string;
-    //double prev_sec = 0;
+    double prev_sec = 0;
     double t_emit = 0;
     double t_average = 0;  //in miliseconds
 
@@ -55,14 +54,9 @@ void hall_sensor::on()  {
     cout << "Measure speed start";
     while(running) {
 
-        /*if(is_moving == true && t_abs.read_time()-prev_sec >= 100) {
+        if(is_moving == true && t_abs.read_time()-prev_sec >= 100) {
             emit time_trip_change(round_1(t_average/1000));
             prev_sec = t_abs.read_time();
-        }
-        */
-        if(is_moving == true) {
-          t_avg_string = QString::number(t_avg.read_time()/1000, 'f', 2);
-          emit time_trip_change(t_avg_string);
         }
 
         if(this->detect()) {
@@ -127,9 +121,11 @@ void hall_sensor::on()  {
                 emit speed_change(0);
                 emit rpm_change(0);
                 is_moving = false;
+
             }
             no_magnet = true;          
         }
         delay(delay_time);
     } //end while
 }
+*/

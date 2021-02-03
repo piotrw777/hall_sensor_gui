@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(distance_change(double)), ui->lcd_distance, SLOT(display(double)));
     QObject::connect(thread_inc.threadC.elem,
-                    SIGNAL(time_trip_change(double)), ui->lcd_time_trip, SLOT(display(double)));
+                    SIGNAL(time_trip_change(QString)), ui->lcd_time_trip, SLOT(display(QString)));
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(average_speed_change(double)), ui->lcd_avg_speed, SLOT(display(double)));
     thread_inc.startOrstopThreadA(); //yellow lamp

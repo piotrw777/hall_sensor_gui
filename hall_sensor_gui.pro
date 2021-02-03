@@ -28,11 +28,11 @@ CONFIG += c++11
 SOURCES += \
     buzzer.cpp \
     hall_sensor.cpp \
+    hall_sensor_kopia.cpp \
         main.cpp \
         mainwindow.cpp \
     thread_inc.cpp \
         value.cpp \
-    timer.cpp \
     wheel.cpp
 
 HEADERS += \
