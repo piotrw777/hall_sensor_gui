@@ -8,10 +8,10 @@
 #include <QFile>
 #include <QFile>
 #include <QTextStream>
-#include "./headers/led.h"
-#include "./headers/element.h"
-#include "./headers/thread_inc.h"
-#include "./headers/hall_sensor.h"
+#include "led.h"
+#include "element.h"
+#include "thread_inc.h"
+#include "hall_sensor.h"
 
 namespace Ui {
 class MainWindow;

@@ -1,10 +1,13 @@
 #ifndef THREAD_INC_H
 #define THREAD_INC_H
-#include "./headers/thread.h"
-#include "./headers/led.h"
-#include "./headers/buzzer.h"
-#include "./headers/hall_sensor.h"
+
+#include "thread.h"
+#include "led.h"
+#include "buzzer.h"
+#include "hall_sensor.h"
 #include "led_kit.h"
+
+class MainWindow;
 
 class Thread_Inc : public QObject
 {
@@ -13,7 +16,9 @@ class Thread_Inc : public QObject
 public:
     Thread_Inc();
     ~Thread_Inc(){exit();}
+
 private:
+
     Thread<led> threadA;
     Thread<buzzer> threadB;
     Thread<hall_sensor> threadC;
@@ -21,15 +26,18 @@ private:
     Thread<led_kit> threadE;
 
 public slots:
-    void startThreadB();
-    void stopThreadB();
-    void startThreadD();
-    void stopThreadD();
 
     void startOrstopThreadA();
     void startOrstopThreadB();
+    void startThreadB();
+    void stopThreadB();
     void startOrstopThreadC();
+    void startThreadD();
+    void stopThreadD();
+    void startThreadE();
+    void stopThreadE();
     void startOrstopThreadE();
+
     void exit();
 };
 

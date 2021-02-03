@@ -1,13 +1,9 @@
-#include "thread_inc.h"
-#include "wheel.h"
 #include <QDebug>
-//#include "ui_mainwindow.h"
 #include <iostream>
-
-//wheel bike(33);
+#include "thread_inc.h"
 
 Thread_Inc::Thread_Inc() : threadA(12)
-  , threadB(27)  //yellow led
+  , threadB(27)  //buzzer
   , threadC(nullptr) //hall_sensor
   , threadD(26)     //blue led
   , threadE(7, vector<int>{16,20,21, 23, 24, 25, 15})
@@ -31,6 +27,14 @@ void Thread_Inc::startThreadD()
 void Thread_Inc::stopThreadD()
 {
     threadD.stop();
+}
+void Thread_Inc::startThreadE()
+{
+    threadE.start();
+}
+void Thread_Inc::stopThreadE()
+{
+    threadE.stop();
 }
 void Thread_Inc::startOrstopThreadA()
 {
@@ -99,5 +103,7 @@ void Thread_Inc::exit()
     threadA.wait();
     threadB.wait();
     threadC.wait();
+    threadD.wait();
+    threadE.wait();
     cout << "Wyjscie z programu\n";
 }

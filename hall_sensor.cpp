@@ -1,16 +1,15 @@
 //============================================================================
 // Name        : hall_sensor.cpp
 //============================================================================
-#include "./headers/hall_sensor.h"
-#include "./headers/timer.h"
-#include "./headers/mainwindow.h"
+#include "hall_sensor.h"
+#include "timer.h"
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
 #include <QDebug>
 #include <QString>
 
 using namespace std;
-
 
 inline double round_2(double x)
 {
@@ -55,19 +54,12 @@ void hall_sensor::on()  {
 
     cout << "Measure speed start";
     while(running) {
-
-        /*if(is_moving == true && t_abs.read_time()-prev_sec >= 100) {
-            emit time_trip_change(round_1(t_average/1000));
-            prev_sec = t_abs.read_time();
-        }
-        */
         if(is_moving == true) {
           t_avg_string = QString::number(t_avg.read_time()/1000, 'f', 2);
           emit time_trip_change(t_avg_string);
         }
 
         if(this->detect()) {
-
             //pierwsza detekcja
             if(stat == 0) {
 
@@ -94,6 +86,9 @@ void hall_sensor::on()  {
                     qDebug() << "Magnet detected " << ++magnet_c << " times. " << endl;
                     continue;
                 }
+                if(is_moving == false) {
+                    emit start_moving();
+                }
                 is_moving = true;
                 t_average += t;
                 t_emit += t;
@@ -101,6 +96,7 @@ void hall_sensor::on()  {
                 rpm = static_cast<int>(60000.0/t);
                 distance += get_perimeter();
 
+                //przekroczenie prędkości
                 if(speed * 3.6 >= 30 && speed_exceded == false) {
                     speed_exceded = true;
                     emit speed_limit_exceed();
@@ -109,7 +105,7 @@ void hall_sensor::on()  {
                     speed_exceded = false;
                     emit speed_normal();
                 }
-
+                //update danych na ekran co 1.5 sek
                 if(t_emit > 1500) {
                     t_emit = 0;
                     emit average_speed_change(distance * 36 / t_average);
@@ -118,8 +114,7 @@ void hall_sensor::on()  {
                     emit speed_change(speed * 3.6);
                 }
 
-                //komunikat na ekran
-
+                //komunikat danych na konsolę
                 qDebug() << "Magnet detected " << ++magnet_c << " times. " << t/1000 <<" s." << endl <<
                 "Velocity: " << speed << " m/s  "<< speed * 3.6 <<" km/h RPM: " <<
                 rpm << endl;
@@ -130,14 +125,18 @@ void hall_sensor::on()  {
             if(no_magnet == false) {
                 t_off.start();
             }
-            if(t_off.is_on() == true && t_off.read_time() > 2000) {
+            if(t_off.is_on() == true && t_off.read_time() > 1500) {
                 if(is_moving == true) {
                     t_avg.pause();
                 }
-                emit speed_change(0);
                 speed_exceded = false;
+                emit speed_change(0);
+                //speed_exceded = false;
                 emit speed_normal();
                 emit rpm_change(0);
+                if(is_moving == true) {
+                    emit stop_moving();
+                }
                 is_moving = false;
             }
             no_magnet = true;          

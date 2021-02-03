@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 class buzzer : public QObject {
     Q_OBJECT
     int pin;
@@ -34,7 +33,7 @@ public:
             digitalWrite(pin, 1);
             delay(200);
         }
-        off();
+        //off();
     }
 
     void buzz(double t = 1)  {

@@ -1,20 +1,20 @@
 //=============================================================
 // Name        : mainwindow.cpp
 //=============================================================
-#include "./headers/mainwindow.h"
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <wiringPi.h>
-#include "./headers/element.h"
-#include "./headers/led.h"
-#include "wheel.h"
+#include "element.h"
+#include "led.h"
 #include "hall_sensor.h"
 #include "thread_inc.h"
 #include <pthread.h>
 
+/*
 #define led_pin 21
 #define led_pin2 16
 #define hall_pin 18
-
+*/
 int element::liczba_elementow = 0;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -43,19 +43,12 @@ MainWindow::MainWindow(QWidget *parent) :
                     SIGNAL(speed_limit_exceed()), &thread_inc, SLOT(startThreadD()));
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(speed_normal()), &thread_inc, SLOT(stopThreadD()));
+    //kit effect
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(start_moving()), &thread_inc, SLOT(startThreadE()));
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(stop_moving()), &thread_inc, SLOT(stopThreadE()));
 
-    /*
-     *                 if(speed * 3.6 > 40 && speed_exceded == false) {
-                    speed_exceded = true;
-                    emit speed_limit_exceed();
-                }
-                if(speed * 3.6 <= 40 && speed_exceded == true) {
-                    speed_exceded = false;
-                    emit speed_normal();
-                }
-     *
-     *
-     * */
     thread_inc.startOrstopThreadA(); //yellow lamp
     thread_inc.startOrstopThreadC(); //hall_sensor
 }
@@ -78,7 +71,6 @@ void MainWindow::on_pushButton_led_clicked()
     thread_inc.startOrstopThreadA();
 }
 
-
 void MainWindow::on_pushButton_buzzer_clicked()
 {
     if(ui->pushButton_buzzer->text() == "Buzzer On")
@@ -90,7 +82,6 @@ void MainWindow::on_pushButton_buzzer_clicked()
         ui->pushButton_buzzer->setText("Buzzer On");
     }
     thread_inc.startOrstopThreadB();
-
 }
 
 void MainWindow::on_pushButton_kit_clicked()
@@ -104,5 +95,4 @@ void MainWindow::on_pushButton_kit_clicked()
         ui->pushButton_kit->setText("Kit On");
     }
     thread_inc.startOrstopThreadE();
-
 }
