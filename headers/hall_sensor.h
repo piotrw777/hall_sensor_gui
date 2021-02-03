@@ -5,7 +5,7 @@
 #define HALL_SENSOR_H
 
 #include "element.h"
-#include "wheel.h"
+//#include "wheel.h"
 #include <QObject>
 #include <QString>
 
@@ -35,6 +35,8 @@ signals:
     void average_speed_change(double);
     void speed_limit_exceed();
     void speed_normal();
+    void start_moving();
+    void stop_moving();
 
 public slots:
     void on();

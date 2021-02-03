@@ -93,6 +93,8 @@ void Thread_Inc::exit()
     threadA.stop();
     threadB.stop();
     threadC.stop();
+    threadD.stop();
+    threadE.stop();
 
     threadA.wait();
     threadB.wait();

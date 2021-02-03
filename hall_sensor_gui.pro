@@ -33,12 +33,9 @@ SOURCES += \
     led_state.cpp \
     main.cpp \
     mainwindow.cpp \
-    thread_inc.cpp \
-    value.cpp \
-    wheel.cpp
+    thread_inc.cpp
 
 HEADERS += \
-    hall_sensor.h \
     headers/buzzer.h \
     headers/element.h \
     headers/hall_sensor.h \
@@ -49,16 +46,6 @@ HEADERS += \
     headers/thread.h \
     headers/thread_inc.h \
     headers/timer.h \
-    headers/value.h \
-    headers/wheel.h \
-    led_kit.h \
-    leds_state.h \
-        mainwindow.h led.h element.h \
-    thread.h \
-    thread_inc.h \
-        value.h \
-    timer.h \
-    wheel.h
 
 LIBS += -L/usr/local/lib -lwiringPi
 FORMS += \
