@@ -2,5 +2,5 @@ pthread.h
 softPwm.h
 rubbish.h
 wiringPi.h
-*.user
+*.user*
 hall_sensor_gui.pro.user.f913a81.22
