@@ -8,10 +8,10 @@
 #include <QFile>
 #include <QFile>
 #include <QTextStream>
-#include "led.h"
-#include "element.h"
-#include "thread_inc.h"
-#include "hall_sensor.h"
+#include "./headers/led.h"
+#include "./headers/element.h"
+#include "./headers/thread_inc.h"
+#include "./headers/hall_sensor.h"
 
 namespace Ui {
 class MainWindow;
@@ -29,6 +29,8 @@ private slots:
 void on_pushButton_led_clicked();
 
 void on_pushButton_kit_clicked();
+
+void on_pushButton_buzzer_clicked();
 
 private:
     Ui::MainWindow *ui;

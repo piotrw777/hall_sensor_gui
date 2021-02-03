@@ -25,8 +25,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+INCLUDEPATH += ./headers
+
 SOURCES += \
     hall_sensor.cpp \
+    led_kit.cpp \
     led_state.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -35,8 +38,19 @@ SOURCES += \
     wheel.cpp
 
 HEADERS += \
-    buzzer.h \
     hall_sensor.h \
+    headers/buzzer.h \
+    headers/element.h \
+    headers/hall_sensor.h \
+    headers/led.h \
+    headers/led_kit.h \
+    headers/leds_state.h \
+    headers/mainwindow.h \
+    headers/thread.h \
+    headers/thread_inc.h \
+    headers/timer.h \
+    headers/value.h \
+    headers/wheel.h \
     led_kit.h \
     leds_state.h \
         mainwindow.h led.h element.h \

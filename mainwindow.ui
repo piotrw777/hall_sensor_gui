@@ -193,14 +193,14 @@ speed</string>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_kit">
+      <widget class="QPushButton" name="pushButton_buzzer">
        <property name="text">
         <string>Buzzer On</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_buzzer">
+      <widget class="QPushButton" name="pushButton_kit">
        <property name="text">
         <string>Kit On</string>
        </property>

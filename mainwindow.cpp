@@ -1,11 +1,11 @@
 //=============================================================
 // Name        : mainwindow.cpp
 //=============================================================
-#include "mainwindow.h"
+#include "./headers/mainwindow.h"
 #include "ui_mainwindow.h"
-#include "wiringPi.h"
-#include "element.h"
-#include "led.h"
+#include <wiringPi.h>
+#include "./headers/element.h"
+#include "./headers/led.h"
 #include "wheel.h"
 #include "hall_sensor.h"
 #include "thread_inc.h"
@@ -78,16 +78,31 @@ void MainWindow::on_pushButton_led_clicked()
     thread_inc.startOrstopThreadA();
 }
 
-void MainWindow::on_pushButton_kit_clicked()
+
+void MainWindow::on_pushButton_buzzer_clicked()
 {
-    if(ui->pushButton_kit->text() == "Buzzer On")
+    if(ui->pushButton_buzzer->text() == "Buzzer On")
     {
-        ui->pushButton_kit->setText("Buzzer Off");
+        ui->pushButton_buzzer->setText("Buzzer Off");
     }
     else
     {
-        ui->pushButton_kit->setText("Buzzer On");
+        ui->pushButton_buzzer->setText("Buzzer On");
     }
     thread_inc.startOrstopThreadB();
+
+}
+
+void MainWindow::on_pushButton_kit_clicked()
+{
+    if(ui->pushButton_kit->text() == "Kit On")
+    {
+        ui->pushButton_kit->setText("Kit Off");
+    }
+    else
+    {
+        ui->pushButton_kit->setText("Kit On");
+    }
+    thread_inc.startOrstopThreadE();
 
 }

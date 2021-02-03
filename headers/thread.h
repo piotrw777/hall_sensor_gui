@@ -4,7 +4,7 @@
 #include <iostream>
 #include <QObject>
 #include <QThread>
-#include "led.h"
+#include "./headers/led.h"
 
 class ThreadBase : public QThread
 {

@@ -5,9 +5,9 @@
 // Copyright   : All rights reserved
 // Description : Projekt licznika rowerowego
 //===========================================================================
-#include "mainwindow.h"
+#include "./headers/mainwindow.h"
 #include <QApplication>
-#include "hall_sensor.h"
+#include "./headers/hall_sensor.h"
 
 int main(int argc, char *argv[])
 {

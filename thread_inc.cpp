@@ -4,8 +4,13 @@
 //#include "ui_mainwindow.h"
 #include <iostream>
 
-wheel bike(33);
-Thread_Inc::Thread_Inc() : threadA(12), threadB(27), threadC(nullptr), threadD(26)
+//wheel bike(33);
+
+Thread_Inc::Thread_Inc() : threadA(12)
+  , threadB(27)  //yellow led
+  , threadC(nullptr) //hall_sensor
+  , threadD(26)     //blue led
+  , threadE(7, vector<int>{16,20,21, 23, 24, 25, 15})
 {
     cout << "Pracuje konstruktor domyslny dla Thread_Inc\n";
 }
@@ -69,6 +74,19 @@ void Thread_Inc::startOrstopThreadC()
     }
 }
 
+void Thread_Inc::startOrstopThreadE()
+{
+    if(threadE.is_active())
+    {
+        qDebug() << "ThreadE stops\n";
+        threadE.stop();
+    }
+    else
+    {
+        qDebug() << "ThreadE starts\n";
+        threadE.start();
+    }
+}
 void Thread_Inc::exit()
 {
     cout << "Exit";

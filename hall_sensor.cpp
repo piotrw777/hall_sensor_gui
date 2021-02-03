@@ -1,9 +1,9 @@
 //============================================================================
 // Name        : hall_sensor.cpp
 //============================================================================
-#include "hall_sensor.h"
-#include "timer.h"
-#include "mainwindow.h"
+#include "./headers/hall_sensor.h"
+#include "./headers/timer.h"
+#include "./headers/mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
 #include <QDebug>
@@ -105,7 +105,7 @@ void hall_sensor::on()  {
                     speed_exceded = true;
                     emit speed_limit_exceed();
                 }
-                if(speed * 3.6 < 30 && speed_exceded == true) {
+                if(speed * 3.6 < 29.8 && speed_exceded == true) {
                     speed_exceded = false;
                     emit speed_normal();
                 }
