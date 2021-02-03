@@ -5,7 +5,7 @@
 #include <iostream>
 
 wheel bike(33);
-Thread_Inc::Thread_Inc() : threadA(12), threadB(27), threadC(nullptr)
+Thread_Inc::Thread_Inc() : threadA(12), threadB(27), threadC(nullptr), threadD(26)
 {
     cout << "Pracuje konstruktor domyslny dla Thread_Inc\n";
 }
@@ -17,6 +17,15 @@ void Thread_Inc::startThreadB()
 void Thread_Inc::stopThreadB()
 {
     threadB.stop();
+}
+
+void Thread_Inc::startThreadD()
+{
+    threadD.start();
+}
+void Thread_Inc::stopThreadD()
+{
+    threadD.stop();
 }
 void Thread_Inc::startOrstopThreadA()
 {

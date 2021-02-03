@@ -6,6 +6,7 @@
 
 class led : public element {
 private:
+    enum led_status {ON, OFF};
     static const int PWM_Range = 100;
     bool soft_pwm;
 public:

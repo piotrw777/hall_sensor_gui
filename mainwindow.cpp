@@ -38,6 +38,11 @@ MainWindow::MainWindow(QWidget *parent) :
                     SIGNAL(speed_limit_exceed()), &thread_inc, SLOT(startThreadB()));
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(speed_normal()), &thread_inc, SLOT(stopThreadB()));
+    //speed limit -> blue led
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(speed_limit_exceed()), &thread_inc, SLOT(startThreadD()));
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(speed_normal()), &thread_inc, SLOT(stopThreadD()));
 
     /*
      *                 if(speed * 3.6 > 40 && speed_exceded == false) {

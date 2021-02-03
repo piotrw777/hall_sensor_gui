@@ -16,10 +16,13 @@ private:
     Thread<led> threadA;
     Thread<buzzer> threadB;
     Thread<hall_sensor> threadC;
+    Thread<led> threadD;
 
 public slots:
     void startThreadB();
     void stopThreadB();
+    void startThreadD();
+    void stopThreadD();
     void startOrstopThreadA();
     void startOrstopThreadB();
     void startOrstopThreadC();
