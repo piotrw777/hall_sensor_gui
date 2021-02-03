@@ -11,10 +11,10 @@ using namespace std;
 
 typedef chrono::_V2::steady_clock::time_point chrono_t;
 
-enum timer_status {OFF, ON, PAUSED};
-
 class timer : public QObject{
     Q_OBJECT
+
+    enum timer_status {OFF, ON, PAUSED};
     chrono_t _start;
     chrono_t _end;
     double _time;
@@ -63,6 +63,7 @@ public slots:
         return _time + static_cast<double>(chrono::duration_cast<chrono::milliseconds>(end_pom - _start).count());
     }
     timer_status get_status() {return status;}
+
     bool is_on() {return status == ON;}
 };
 #endif // TIMER_H

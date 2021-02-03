@@ -10,6 +10,14 @@ Thread_Inc::Thread_Inc() : threadA(12), threadB(27), threadC(nullptr)
     cout << "Pracuje konstruktor domyslny dla Thread_Inc\n";
 }
 
+void Thread_Inc::startThreadB()
+{
+    threadB.start();
+}
+void Thread_Inc::stopThreadB()
+{
+    threadB.stop();
+}
 void Thread_Inc::startOrstopThreadA()
 {
     if(threadA.is_active())

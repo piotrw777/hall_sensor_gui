@@ -4,30 +4,43 @@
 #include <iostream>
 #include "element.h"
 #include <wiringPi.h>
+#include <QObject>
 
 using namespace std;
 
-class buzzer : public element {
+
+class buzzer : public QObject {
+    Q_OBJECT
+    int pin;
+    bool is_on;
+    enum buzz_status {ON, OFF, BUZZING};
+    buzz_status status;
 public:
-    buzzer(int pin_) : element(pin_) {
+    buzzer(int pin_) : pin(pin_) {
         cout << "Dziala konstruktor klasy buzzer\n";
         pinMode(pin_, OUTPUT);
         digitalWrite(pin_, 1);
+        status = OFF;
     }
-    void off() const override {
+    void off()   {
         digitalWrite(pin, 1);
+        status = OFF;
     }
-    void on(int t = 0) const override { // 10 = 1sec
-        digitalWrite(pin, 0);
-        if(t == 0) return;
-        delay(100*t);
-        this->off();
+    void on()   { // 10 = 1sec
+        status = ON;
+        while(status != OFF) {
+            digitalWrite(pin, 0);
+            delay(200);
+            digitalWrite(pin, 1);
+            delay(200);
+        }
+        off();
     }
 
-    void buzz(double t = 1) {
-        this->on();
+    void buzz(double t = 1)  {
+        on();
         delay(t*100);
-        this->off();
+        off();
     }
     virtual ~buzzer() {
         cout << "Dziala destruktor klasy buzzer\n";

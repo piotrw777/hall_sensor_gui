@@ -19,6 +19,7 @@ private:
     long double perimeter; //w centymetrach
     double pi;
     bool running;
+    bool speed_exceded;
     double get_perimeter() const{return perimeter;}
     inline double velocity(const double &t) const { return (perimeter * 10)/t; }
     bool detect() const { return !digitalRead(pin); }
@@ -32,6 +33,8 @@ signals:
     void rpm_change(int);
     void time_trip_change(QString);
     void average_speed_change(double);
+    void speed_limit_exceed();
+    void speed_normal();
 
 public slots:
     void on();

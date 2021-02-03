@@ -17,7 +17,9 @@ private:
     Thread<buzzer> threadB;
     Thread<hall_sensor> threadC;
 
-private slots:
+public slots:
+    void startThreadB();
+    void stopThreadB();
     void startOrstopThreadA();
     void startOrstopThreadB();
     void startOrstopThreadC();

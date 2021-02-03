@@ -30,6 +30,7 @@ hall_sensor::hall_sensor(QObject *parent) : QObject(parent)
     sooze_time = 2000;
     delay_time = 1;
     running = false;
+    speed_exceded = false;
 }
 
 void hall_sensor::on()  {
@@ -100,6 +101,15 @@ void hall_sensor::on()  {
                 rpm = static_cast<int>(60000.0/t);
                 distance += get_perimeter();
 
+                if(speed * 3.6 >= 30 && speed_exceded == false) {
+                    speed_exceded = true;
+                    emit speed_limit_exceed();
+                }
+                if(speed * 3.6 < 30 && speed_exceded == true) {
+                    speed_exceded = false;
+                    emit speed_normal();
+                }
+
                 if(t_emit > 1500) {
                     t_emit = 0;
                     emit average_speed_change(distance * 36 / t_average);
@@ -125,6 +135,8 @@ void hall_sensor::on()  {
                     t_avg.pause();
                 }
                 emit speed_change(0);
+                speed_exceded = false;
+                emit speed_normal();
                 emit rpm_change(0);
                 is_moving = false;
             }

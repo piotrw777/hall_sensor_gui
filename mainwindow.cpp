@@ -34,6 +34,23 @@ MainWindow::MainWindow(QWidget *parent) :
                     SIGNAL(time_trip_change(QString)), ui->lcd_time_trip, SLOT(display(QString)));
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(average_speed_change(double)), ui->lcd_avg_speed, SLOT(display(double)));
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(speed_limit_exceed()), &thread_inc, SLOT(startThreadB()));
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(speed_normal()), &thread_inc, SLOT(stopThreadB()));
+
+    /*
+     *                 if(speed * 3.6 > 40 && speed_exceded == false) {
+                    speed_exceded = true;
+                    emit speed_limit_exceed();
+                }
+                if(speed * 3.6 <= 40 && speed_exceded == true) {
+                    speed_exceded = false;
+                    emit speed_normal();
+                }
+     *
+     *
+     * */
     thread_inc.startOrstopThreadA(); //yellow lamp
     thread_inc.startOrstopThreadC(); //hall_sensor
 }
