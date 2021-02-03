@@ -28,6 +28,7 @@ CONFIG += c++11
 SOURCES += \
     hall_sensor.cpp \
     hall_sensor_kopia.cpp \
+    led_state.cpp \
         main.cpp \
         mainwindow.cpp \
     thread_inc.cpp \
@@ -37,6 +38,8 @@ SOURCES += \
 HEADERS += \
     buzzer.h \
     hall_sensor.h \
+    led_kit.h \
+    leds_state.h \
         mainwindow.h led.h element.h \
     thread.h \
     thread_inc.h \

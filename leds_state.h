@@ -7,12 +7,12 @@
 
 using namespace std;
 
-enum direction;
+
 
 class leds_state{
 
 private:
-
+    enum direction {left, right};
     int M; //max power
     int peak;
     direction dir;
