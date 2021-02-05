@@ -5,7 +5,7 @@
 #define HALL_SENSOR_H
 
 #include "element.h"
-//#include "wheel.h"
+#include "timer.h"
 #include <QObject>
 #include <QString>
 
@@ -13,7 +13,7 @@ class hall_sensor : public QObject {
     Q_OBJECT
 private:
     int pin;
-    int sooze_time;
+    int stop_time;
     int delay_time;
     double radius;  //w centymetrach
     long double perimeter; //w centymetrach
@@ -23,6 +23,7 @@ private:
     double get_perimeter() const{return perimeter;}
     inline double velocity(const double &t) const { return (perimeter * 10)/t; }
     bool detect() const { return !digitalRead(pin); }
+    void stopping_function(bool &var_check,bool &is_moving, timer &t_off, timer &t_avg);
 
 public:
     explicit hall_sensor(QObject *parent = nullptr);
