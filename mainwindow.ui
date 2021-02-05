@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>959</width>
-    <height>331</height>
+    <height>471</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,32 +21,15 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>130</y>
-      <width>891</width>
-      <height>121</height>
+      <y>180</y>
+      <width>901</width>
+      <height>231</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="1">
-      <widget class="QLCDNumber" name="lcd_rpm">
-       <property name="smallDecimalPoint">
-        <bool>false</bool>
-       </property>
-       <property name="digitCount">
-        <number>4</number>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QLCDNumber" name="lcd_avg_speed">
-       <property name="smallDecimalPoint">
-        <bool>false</bool>
-       </property>
-       <property name="segmentStyle">
-        <enum>QLCDNumber::Filled</enum>
-       </property>
-      </widget>
-     </item>
+     <property name="sizeConstraint">
+      <enum>QLayout::SetNoConstraint</enum>
+     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label_speed">
        <property name="font">
@@ -78,37 +61,47 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QLCDNumber" name="lcd_distance">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
+     <item row="0" column="4">
+      <widget class="QLabel" name="label_time_trip">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
+       <property name="text">
+        <string>time trip [s]</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLCDNumber" name="lcd_avg_speed">
+       <property name="smallDecimalPoint">
+        <bool>false</bool>
+       </property>
+       <property name="segmentStyle">
+        <enum>QLCDNumber::Filled</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="QLCDNumber" name="lcd_time_trip">
+       <property name="digitCount">
+        <number>6</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLCDNumber" name="lcd_rpm">
        <property name="smallDecimalPoint">
         <bool>false</bool>
        </property>
        <property name="digitCount">
         <number>4</number>
-       </property>
-       <property name="value" stdset="0">
-        <double>0.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="label_rpm">
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-         <weight>75</weight>
-         <italic>false</italic>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>rpm</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -149,27 +142,44 @@ speed</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="4">
-      <widget class="QLabel" name="label_time_trip">
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_rpm">
        <property name="font">
         <font>
          <pointsize>14</pointsize>
          <weight>75</weight>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
        <property name="text">
-        <string>time trip [s]</string>
+        <string>rpm</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
-     <item row="1" column="4">
-      <widget class="QLCDNumber" name="lcd_time_trip">
+     <item row="1" column="2">
+      <widget class="QLCDNumber" name="lcd_distance">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="smallDecimalPoint">
+        <bool>false</bool>
+       </property>
        <property name="digitCount">
-        <number>6</number>
+        <number>4</number>
+       </property>
+       <property name="value" stdset="0">
+        <double>0.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QDial" name="dial_rpm">
+       <property name="maximum">
+        <number>1000</number>
        </property>
       </widget>
      </item>
@@ -180,15 +190,15 @@ speed</string>
      <rect>
       <x>30</x>
       <y>20</y>
-      <width>401</width>
-      <height>81</height>
+      <width>435</width>
+      <height>87</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QPushButton" name="pushButton_led">
        <property name="text">
-        <string>Led off</string>
+        <string>Led Off</string>
        </property>
       </widget>
      </item>
@@ -206,20 +216,69 @@ speed</string>
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>EXIT</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QWidget" name="gridLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>840</x>
-      <y>270</y>
-      <width>94</width>
-      <height>25</height>
+      <x>620</x>
+      <y>20</y>
+      <width>329</width>
+      <height>81</height>
      </rect>
     </property>
-    <property name="text">
-     <string>EXIT</string>
-    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="spinBox_radius">
+       <property name="maximum">
+        <number>999</number>
+       </property>
+       <property name="value">
+        <number>330</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+         <weight>75</weight>
+         <italic>true</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>radius [mm]</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+         <weight>75</weight>
+         <italic>true</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>speed unit</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="comboBox"/>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>

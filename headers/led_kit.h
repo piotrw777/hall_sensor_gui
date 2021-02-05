@@ -22,6 +22,8 @@ private:
     inline double scale_1(double k) {
         return k*k/100;
     }
+    void all_leds_on(int time);
+    void all_leds_off();
 
 public:
     led_kit(int N, vector<int> vec);
@@ -29,9 +31,6 @@ public:
     void on();
     void off();
 };
-
-
-
 
 
 //array<led, N> leds  = {16,20,21, 23, 24, 25, 15};

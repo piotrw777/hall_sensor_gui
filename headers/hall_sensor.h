@@ -42,6 +42,7 @@ signals:
 public slots:
     void on();
     void off() {running = false;}
+    void change_radius(int r) {radius = r/10.0; perimeter = 2*pi*radius;} //r in mm
 };
 
 #endif // HALL_SENSOR_H

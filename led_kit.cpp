@@ -23,11 +23,21 @@ void led_kit::on()
         off();
     }
 }
-
-void led_kit::off()
-{
-    status = OFF;
+void led_kit::all_leds_off() {
     for(int k = 0; k < K; k++) {
         softPwmWrite(leds[k].get_pin(), 0);
     }
+}
+void led_kit::all_leds_on(int time) {
+    for(int k = 0; k < K; k++) {
+        softPwmWrite(leds[k].get_pin(), 100);
+    }
+    delay(time);
+    all_leds_off();
+}
+void led_kit::off()
+{
+    status = OFF;
+    all_leds_on(500);
+
 }

@@ -26,8 +26,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(speed_change(double)), ui->lcd_speed, SLOT(display(double)));
+    //rpm change
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(rpm_change(int)), ui->lcd_rpm, SLOT(display(int)));
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(rpm_change(int)), ui->dial_rpm, SLOT(setValue(int)));
+
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(distance_change(double)), ui->lcd_distance, SLOT(display(double)));
     QObject::connect(thread_inc.threadC.elem,
@@ -48,6 +52,10 @@ MainWindow::MainWindow(QWidget *parent) :
                     SIGNAL(start_moving()), &thread_inc, SLOT(startThreadE()));
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(stop_moving()), &thread_inc, SLOT(stopThreadE()));
+
+    //change radius
+    QObject::connect(ui->spinBox_radius, SIGNAL(valueChanged(int)),
+                     thread_inc.threadC.elem, SLOT(change_radius(int)));
 
     thread_inc.startOrstopThreadA(); //yellow lamp
     thread_inc.startOrstopThreadC(); //hall_sensor
