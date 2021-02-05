@@ -43,6 +43,7 @@ void hall_sensor::on()  {
             if(no_magnet == true) {
                 no_magnet = false;
                 t1.stop(t);
+                t1.start();
                 //przerwa w jeździe
                 if(t > sooze_time) {
                     t1.start();
@@ -81,9 +82,8 @@ void hall_sensor::on()  {
                 //komunikat danych na konsolę
                 qDebug() << "Magnet detected " << ++magnet_c << " times. " << t/1000 <<" s." << endl <<
                 "Velocity: " << speed << " m/s  "<< speed * 3.6 <<" km/h RPM: " << rpm << endl;
-
-                t1.start();
             } // end if(no_magnet == true)
+            //***********************
         } //end if(this->detect())
         else {
             if(no_magnet == false) {
