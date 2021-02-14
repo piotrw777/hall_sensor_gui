@@ -30,6 +30,11 @@ hall_sensor::hall_sensor(QObject *parent) : QObject(parent)
     delay_time = 1;
     running = false;
     speed_exceded = false;
+    speed_limit_value = 16.66;
+    unit_number = 0;
+    speed_units[0] = 3.6;
+    speed_units[1] = 1;
+    speed_units[2] = 3.6/1.609344;
 }
 void hall_sensor::stopping_function(bool &var_check,bool &is_moving, timer &t_off, timer &t_avg) {
     if(var_check == false) {
@@ -114,11 +119,11 @@ void hall_sensor::on()  {
                 distance += get_perimeter();
 
                 //przekroczenie prędkości
-                if(speed * 3.6 >= 60 && speed_exceded == false) {
+                if(speed  >= speed_limit_value && speed_exceded == false) {
                     speed_exceded = true;
                     emit speed_limit_exceed();
                 }
-                if(speed * 3.6 < 59.8 && speed_exceded == true) {
+                if(speed  < speed_limit_value - 0.2 && speed_exceded == true) {
                     speed_exceded = false;
                     emit speed_normal();
                 }
@@ -128,7 +133,7 @@ void hall_sensor::on()  {
                     emit average_speed_change(distance * 36 / t_average);
                     emit distance_change(distance/100000);
                     emit rpm_change(rpm);
-                    emit speed_change(speed * 3.6);
+                    emit speed_change(speed * speed_units[unit_number]);
                 }
                 //komunikat danych na konsolę
                 qDebug() << "Magnet detected " << ++magnet_c << " times. " << t/1000 <<" s." << endl <<
@@ -141,15 +146,12 @@ void hall_sensor::on()  {
         }  //end else
         delay(delay_time);
     } //end while
+}
+
+void hall_sensor::change_unit(int newk)
+{
+    unit_number = newk;
 }  //end on function
-
-
-
-
-
-
-
-
 
 /*
 void hall_sensor::on()  {

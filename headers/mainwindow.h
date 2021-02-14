@@ -13,6 +13,7 @@
 #include "thread_inc.h"
 #include "hall_sensor.h"
 
+
 namespace Ui {
 class MainWindow;
 }

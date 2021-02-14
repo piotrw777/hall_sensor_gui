@@ -9,6 +9,7 @@
 #include "hall_sensor.h"
 #include "thread_inc.h"
 #include <pthread.h>
+#include "circle.h"
 
 /*
 #define led_pin 21
@@ -24,8 +25,15 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     ui->setupUi(this);
+    ui->comboBox->addItem("km/h");
+    ui->comboBox->addItem("m/s");
+    ui->comboBox->addItem("mph");
+    //change speed
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(speed_change(double)), ui->lcd_speed, SLOT(display(double)));
+
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(speed_change(double)), ui->myDial, SLOT(changeValue(double)));
     //rpm change
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(rpm_change(int)), ui->lcd_rpm, SLOT(display(int)));
@@ -56,6 +64,14 @@ MainWindow::MainWindow(QWidget *parent) :
     //change radius
     QObject::connect(ui->spinBox_radius, SIGNAL(valueChanged(int)),
                      thread_inc.threadC.elem, SLOT(change_radius(int)));
+    //change unit
+    QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
+                     ui->lcdCombo, SLOT(display(int)));
+    QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
+                    thread_inc.threadC.elem, SLOT(change_unit(int)));
+    QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)),
+                    ui->label_speed, SLOT(setText(QString)));
+
 
     thread_inc.startOrstopThreadA(); //yellow lamp
     thread_inc.startOrstopThreadC(); //hall_sensor

@@ -28,6 +28,7 @@ CONFIG += c++11
 INCLUDEPATH += ./headers
 
 SOURCES += \
+    circle.cpp \
     hall_sensor.cpp \
     led_kit.cpp \
     led_state.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
     thread_inc.cpp
 
 HEADERS += \
+    circle.h \
     headers/buzzer.h \
     headers/element.h \
     headers/hall_sensor.h \

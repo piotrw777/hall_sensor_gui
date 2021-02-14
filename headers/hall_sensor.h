@@ -17,9 +17,12 @@ private:
     int delay_time;
     double radius;  //w centymetrach
     long double perimeter; //w centymetrach
+    int unit_number;
+    double speed_units[3];
     double pi;
     bool running;
     bool speed_exceded;
+    double speed_limit_value = 16; //[m/s]
     double get_perimeter() const{return perimeter;}
     inline double velocity(const double &t) const { return (perimeter * 10)/t; }
     bool detect() const { return !digitalRead(pin); }
@@ -43,6 +46,7 @@ public slots:
     void on();
     void off() {running = false;}
     void change_radius(int r) {radius = r/10.0; perimeter = 2*pi*radius;} //r in mm
+    void change_unit(int newk);
 };
 
 #endif // HALL_SENSOR_H
