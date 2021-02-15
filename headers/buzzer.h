@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "element.h"
-#include <wiringPi.h>
+#include "wiringPi.h"
 #include <QObject>
 
 using namespace std;
