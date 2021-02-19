@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>resources/arrow_left.png</file>
+        <file>resources/arrow_right.png</file>
+        <file>resources/cubes_background.jpg</file>
+        <file>resources/shutdown.png</file>
+    </qresource>
+</RCC>

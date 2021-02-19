@@ -38,9 +38,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(rpm_change(int)), ui->lcd_rpm, SLOT(display(int)));
     QObject::connect(thread_inc.threadC.elem,
-                    SIGNAL(rpm_change(int)), ui->dial_rpm, SLOT(setValue(int)));
-
-    QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(distance_change(double)), ui->lcd_distance, SLOT(display(double)));
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(time_trip_change(QString)), ui->lcd_time_trip, SLOT(display(QString)));
