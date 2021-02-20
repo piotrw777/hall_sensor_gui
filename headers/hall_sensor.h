@@ -14,6 +14,7 @@ class hall_sensor : public QObject {
 private:
     int pin;
     int stop_time;
+    int update_time;
     int delay_time;
     double radius;  //w centymetrach
     long double perimeter; //w centymetrach

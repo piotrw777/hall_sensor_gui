@@ -13,6 +13,14 @@
   <property name="windowTitle">
    <string>Licznik prędkości</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">speedometer#speedmeter
+{
+border: 1px solid;
+border-color: blue;
+background: rgb(9, 56, 110,150)
+}</string>
+  </property>
   <property name="tabShape">
    <enum>QTabWidget::Rounded</enum>
   </property>
@@ -187,12 +195,12 @@ background: rgb(9, 56, 110,150)
        <enum>Qt::Vertical</enum>
       </property>
       <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
+       <enum>QSizePolicy::Maximum</enum>
       </property>
       <property name="sizeHint" stdset="0">
        <size>
-        <width>20</width>
-        <height>40</height>
+        <width>0</width>
+        <height>0</height>
        </size>
       </property>
      </spacer>
@@ -205,50 +213,21 @@ background: rgb(9, 56, 110,150)
          <number>50</number>
         </property>
         <item>
-         <widget class="QLabel" name="label_speed">
-          <property name="font">
-           <font>
-            <family>Mongolian Baiti</family>
-            <pointsize>14</pointsize>
-            <weight>50</weight>
-            <italic>false</italic>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>speed [km/h]</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="circle" name="myDial" native="true">
+         <widget class="speedometer" name="speedmeter" native="true">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>10</horstretch>
-            <verstretch>10</verstretch>
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="minimumSize">
            <size>
-            <width>300</width>
-            <height>300</height>
+            <width>200</width>
+            <height>200</height>
            </size>
           </property>
-          <property name="font">
-           <font>
-            <stylestrategy>PreferAntialias</stylestrategy>
-           </font>
-          </property>
           <property name="styleSheet">
-           <string notr="true">#myDial
-{
-border: 1px solid;
-border-color: red;
-
-}</string>
+           <string notr="true"/>
           </property>
          </widget>
         </item>
@@ -516,6 +495,25 @@ border-color: red;
           </property>
          </widget>
         </item>
+        <item row="10" column="1">
+         <widget class="QLabel" name="label_speed">
+          <property name="font">
+           <font>
+            <family>Mongolian Baiti</family>
+            <pointsize>14</pointsize>
+            <weight>50</weight>
+            <italic>false</italic>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>speed [km/h]</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
         <item row="11" column="1">
          <spacer name="verticalSpacer_3">
           <property name="orientation">
@@ -660,7 +658,7 @@ background: rgb(9, 56, 110,150)
        <item>
         <widget class="QSpinBox" name="spinBox_radius">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="font">
           <font>
@@ -725,9 +723,9 @@ background: rgb(9, 56, 110,150)
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>circle</class>
+   <class>speedometer</class>
    <extends>QWidget</extends>
-   <header>circle.h</header>
+   <header>speedometer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

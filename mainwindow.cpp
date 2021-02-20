@@ -31,9 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //change speed
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(speed_change(double)), ui->lcd_speed, SLOT(display(double)));
-
     QObject::connect(thread_inc.threadC.elem,
-                    SIGNAL(speed_change(double)), ui->myDial, SLOT(changeValue(double)));
+                    SIGNAL(speed_change(double)), ui->speedmeter, SLOT(changeValue(double)));
     //rpm change
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(rpm_change(int)), ui->lcd_rpm, SLOT(display(int)));

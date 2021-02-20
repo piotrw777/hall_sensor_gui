@@ -28,16 +28,15 @@ CONFIG += c++11
 INCLUDEPATH += ./headers
 
 SOURCES += \
-    circle.cpp \
     hall_sensor.cpp \
     led_kit.cpp \
     led_state.cpp \
     main.cpp \
     mainwindow.cpp \
+    speedometer.cpp \
     thread_inc.cpp
 
 HEADERS += \
-    circle.h \
     headers/buzzer.h \
     headers/element.h \
     headers/hall_sensor.h \
@@ -48,6 +47,7 @@ HEADERS += \
     headers/thread.h \
     headers/thread_inc.h \
     headers/timer.h \
+    speedometer.h
 
 LIBS += -L/usr/local/lib -lwiringPi
 FORMS += \

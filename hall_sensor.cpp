@@ -27,6 +27,7 @@ hall_sensor::hall_sensor(QObject *parent) : QObject(parent)
     radius = 33; //in cm
     perimeter = 2*pi*radius;
     stop_time = 1500;  //msec
+    update_time = 500;  //msec
     delay_time = 1;
     running = false;
     speed_exceded = false;
@@ -128,7 +129,7 @@ void hall_sensor::on()  {
                     emit speed_normal();
                 }
                 //update danych na ekran co 1.5 sek
-                if(t_emit > 1500) {
+                if(t_emit > update_time) {
                     t_emit = 0;
                     emit average_speed_change(distance * 36 / t_average);
                     emit distance_change(distance/100000);
