@@ -24,7 +24,8 @@ void speedometer::paintEvent(QPaintEvent *event)
     //static const double pi = 3.1415926535;
     const int W = 200;
     const int T = 160;
-    const int R = 10;
+    const int Re = 10;
+    const int R = 8;
     const int CP = 180;
     const int ANGLE = 270;
     const int regions = 20;
@@ -40,9 +41,9 @@ void speedometer::paintEvent(QPaintEvent *event)
     QRect P(A, B);
 
     QRadialGradient grad1(QPoint(0,0), 180);
-    grad1.setColorAt(0.0, QColor(Qt::white));
-    grad1.setColorAt(0.2, QColor(Qt::blue));
-    grad1.setColorAt(0.8, QColor(Qt::black));
+    grad1.setColorAt(0.0, QColor(255, 255, 255, 100));
+    grad1.setColorAt(0.2, QColor(0,0,250, 100));
+    grad1.setColorAt(0.8, QColor(0,0,0,100));
 
     QPen piePen(Qt::NoPen);
     QBrush pieBrush(grad1);
@@ -52,8 +53,8 @@ void speedometer::paintEvent(QPaintEvent *event)
     painter.drawPie(P,-16*(ANGLE/2.0-90), ANGLE*16);
 
     //draw central circle
-    QPoint A1(-R, -R);
-    QPoint B1(R, R);
+    QPoint A1(-Re, -Re);
+    QPoint B1(Re, Re);
     QRect P1(A1, B1);
 
     QPen ellipsePen(Qt::green);
@@ -106,11 +107,11 @@ void speedometer::paintEvent(QPaintEvent *event)
     painter.restore();
 
     //draw arrow
-    QPoint R1(-R/sqrt(2),-R/sqrt(2));
-    QPoint R2(R/sqrt(2), R/sqrt(2));
-    QPoint R3(-T/sqrt(2), T/sqrt(2));
+    QPointF R1(-R/sqrt(2),-R/sqrt(2));
+    QPointF R2(R/sqrt(2), R/sqrt(2));
+    QPointF R3(-T/sqrt(2), T/sqrt(2));
 
-    QPoint ArrowPoints[3]={R1, R2, R3};
+    QPointF ArrowPoints[3]={R1, R2, R3};
     QPen arrowPen(Qt::NoPen);
     QLinearGradient arrowgrad(QPoint(0,0), R3);
     arrowgrad.setColorAt(0, Qt::green);
@@ -186,8 +187,9 @@ void speedometer::paintEvent(QPaintEvent *event)
         v += 5;
     }
 
-    QPen arcPen(Qt::red, Qt::FlatCap);
+    QPen arcPen(Qt::red);
     arcPen.setWidth(5);
+    arcPen.setCapStyle(Qt::FlatCap);
     painter.setPen(arcPen);
     painter.drawArc(P,225*16-16*2.7*val,16*2.7*val);
 
