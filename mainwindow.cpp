@@ -8,8 +8,10 @@
 #include "led.h"
 #include "hall_sensor.h"
 #include "thread_inc.h"
+#include <QCloseEvent>
+#include <QMessageBox>
 #include <pthread.h>
-#include "circle.h"
+//#include "circle.h"
 
 /*
 #define led_pin 21
@@ -23,11 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     thread_inc()
 {
-
     ui->setupUi(this);
     ui->comboBox->addItem("km/h");
     ui->comboBox->addItem("m/s");
     ui->comboBox->addItem("mph");
+    LoadSettings();
     //change speed
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(speed_change(double)), ui->lcd_speed, SLOT(display(double)));
@@ -61,12 +63,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->spinBox_radius, SIGNAL(valueChanged(int)),
                      thread_inc.threadC.elem, SLOT(change_radius(int)));
     //change unit
-    QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
-                     ui->lcdCombo, SLOT(display(int)));
+    //QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
+    //                 ui->lcdCombo, SLOT(display(int)));
     QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
                     thread_inc.threadC.elem, SLOT(change_unit(int)));
-    QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)),
-                    ui->label_speed, SLOT(setText(QString)));
+    //QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)),
+    //                ui->label_speed, SLOT(setText(QString)));
 
 
     thread_inc.startOrstopThreadA(); //yellow lamp
@@ -76,6 +78,15 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+      //event->ignore();
+      //if (QMessageBox::Yes == QMessageBox::question(this, "Close Confirmation", "Exit?", QMessageBox::Yes | QMessageBox::No)) {
+       // event->accept();
+        SaveSettings();
+      //}
 }
 
 void MainWindow::on_pushButton_led_clicked()
@@ -102,6 +113,26 @@ void MainWindow::on_pushButton_buzzer_clicked()
         ui->pushButton_buzzer->setText("Buzzer On");
     }
     thread_inc.startOrstopThreadB();
+}
+
+void MainWindow::LoadSettings()
+{
+    QSettings setting(ORGANIZATION_NAME,APPLICATION_NAME);
+    int radius = setting.value("radius").toInt();
+    int unit_index = setting.value("units").toInt();
+    QRect rect = setting.value("position").toRect();
+
+    this->setGeometry(rect);
+    ui->spinBox_radius->setValue(radius);
+    ui->comboBox->setCurrentIndex(unit_index);
+}
+
+void MainWindow::SaveSettings()
+{
+    QSettings setting(ORGANIZATION_NAME,APPLICATION_NAME);
+    setting.setValue("units", ui->comboBox->currentIndex());
+    setting.setValue("radius", ui->spinBox_radius->value());
+    setting.setValue("position", this->geometry());
 }
 
 void MainWindow::on_pushButton_kit_clicked()

@@ -66,24 +66,23 @@ void speedometer::paintEvent(QPaintEvent *event)
     painter.drawEllipse(P1);
 
     //drawing line 0km/h
-    /*
-    const int d = 15;
-    QPoint CBase(-CP/sqrt(2), CP/sqrt(2));
+//pomoicniczy prostokat
 
-    QPoint Acp(-CP/sqrt(2)-d, CP/sqrt(2)-d);
-    QPoint Bcp(-CP/sqrt(2)+d, CP/sqrt(2)+d);
-    QRectF pomRec(Acp,Bcp);
-    QPainter pomRecPainter(this);
-    pomRecPainter.setWindow(-W,-W, 2*W, 2*W);
+//    const int d = 15;
+//    QPoint CBase(-CP/sqrt(2), CP/sqrt(2));
 
-    QPen pomRecPen(Qt::black);
-    pomRecPen.setWidth(5);
-    pomRecPainter.setPen(pomRecPen);
-    //pomRecPainter.drawRect(pomRec);
-    pomRecPainter.rotate(27);
-   // pomRecPainter.drawRect(pomRec);
+//    QPoint Acp(-CP/sqrt(2)-d, CP/sqrt(2)-d);
+//    QPoint Bcp(-CP/sqrt(2)+d, CP/sqrt(2)+d);
+//    QRectF pomRec(Acp,Bcp);
+//    QPainter pomRecPainter(this);
+//    pomRecPainter.setWindow(-W,-W, 2*W, 2*W);
 
-*/
+//    QPen pomRecPen(Qt::black);
+//    pomRecPen.setWidth(5);
+//    pomRecPainter.setPen(pomRecPen);
+//    pomRecPainter.drawRect(pomRec);
+//    pomRecPainter.rotate(27);
+//    pomRecPainter.drawRect(pomRec);
 
     QPoint L1(-T/sqrt(2), T/sqrt(2));
     QPoint L2(-T/1.7,T/1.7);
@@ -94,7 +93,7 @@ void speedometer::paintEvent(QPaintEvent *event)
     painter.setPen(linePen);
     painter.drawLine(L1, L2);
 
-    //pomocniczy prostokąt
+
     painter.save();
     for(int k = 0; k < regions; k++) {
         painter.rotate(1.0*ANGLE/regions);
@@ -117,7 +116,7 @@ void speedometer::paintEvent(QPaintEvent *event)
     arrowgrad.setColorAt(0, Qt::green);
     arrowgrad.setColorAt(0.6, Qt::white);
     arrowgrad.setColorAt(0.9,Qt::yellow);
-    QBrush arrowBrush(arrowgrad);
+    QBrush arrowBrush(Qt::green);
 
     painter.setBrush(arrowBrush);
     painter.setPen(arrowPen);
@@ -127,19 +126,19 @@ void speedometer::paintEvent(QPaintEvent *event)
     painter.drawConvexPolygon(ArrowPoints, 3);
     painter.restore();
 
-/*
+
     //koło pomocnicze
-    QPainter pomCircle(this);
-    QRect CPRect(-CP, -CP, 2*CP, 2*CP);
+//    QPainter pomCircle(this);
+//    QRect CPRect(-CP, -CP, 2*CP, 2*CP);
 
-    QPen pomCirclePen(Qt::red);
-    pomCirclePen.setWidth(2);
+//    QPen pomCirclePen(Qt::red);
+//    pomCirclePen.setWidth(2);
 
-    pomCircle.setWindow(-W,-W, 2*W, 2*W);
-    pomCircle.setRenderHint(QPainter::Antialiasing);
-    pomCircle.setPen(pomCirclePen);
-    pomCircle.drawEllipse(CPRect);
-*/
+//    pomCircle.setWindow(-W,-W, 2*W, 2*W);
+//    pomCircle.setRenderHint(QPainter::Antialiasing);
+//    pomCircle.setPen(pomCirclePen);
+//    pomCircle.drawEllipse(CPRect);
+
 
     //punkty pomocnicze
 
@@ -149,18 +148,18 @@ void speedometer::paintEvent(QPaintEvent *event)
         centralPoints.push_back(QPoint(CP*cosd(225-k*13.5), -CP*sind(225-k*13.5)));
     }
 
-/*
-    QPainter pointsPainter(this);
-    pointsPainter.setWindow(-W,-W, 2*W, 2*W);
-    pointsPainter.setRenderHint(QPainter::Antialiasing);
-    QPen pointsPen(Qt::yellow);
-    pointsPen.setWidth(2);
-    pointsPainter.setPen(pointsPen);
 
-    for(int k = 0; k < 21; k++) {
-        pointsPainter.drawPoint(centralPoints[k]);
-    }
-*/
+//    QPainter pointsPainter(this);
+//    pointsPainter.setWindow(-W,-W, 2*W, 2*W);
+//    pointsPainter.setRenderHint(QPainter::Antialiasing);
+//    QPen pointsPen(Qt::yellow);
+//    pointsPen.setWidth(2);
+//    pointsPainter.setPen(pointsPen);
+
+//    for(int k = 0; k < 21; k++) {
+//        pointsPainter.drawPoint(centralPoints[k]);
+//    }
+
 
     QPainter textpainter(this);
     textpainter.setViewport( (width()-side)/2, (height()-side)/2, side, side);
@@ -190,6 +189,7 @@ void speedometer::paintEvent(QPaintEvent *event)
     QPen arcPen(Qt::red);
     arcPen.setWidth(5);
     arcPen.setCapStyle(Qt::FlatCap);
+    painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(arcPen);
     painter.drawArc(P,225*16-16*2.7*val,16*2.7*val);
 
