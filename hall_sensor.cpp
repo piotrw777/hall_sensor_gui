@@ -1,6 +1,8 @@
 //============================================================================
 // Name        : hall_sensor.cpp
 //============================================================================
+#define DEBUG_INFO 0
+
 #include "hall_sensor.h"
 #include "timer.h"
 #include "mainwindow.h"
@@ -25,23 +27,30 @@ hall_sensor::hall_sensor(QObject *parent) : QObject(parent)
     pinMode(pin,INPUT);
     pi = 3.1415926535;
     radius = 33; //in cm
+    qDebug() << "Promien ustawiony w konstruktorze!!!\n";
     perimeter = 2*pi*radius;
     stop_time = 1500;  //msec
     update_time = 500;  //msec
-    delay_time = 1;
+    delay_time = 5;
     running = false;
     speed_exceded = false;
     speed_limit_value = 16.66;
     unit_number = 0;
-    speed_units[0] = 3.6;
-    speed_units[1] = 1;
-    speed_units[2] = 3.6/1.609344;
+    speed_units[0] = 3.6; //0 = km/h
+    speed_units[1] = 1;   //1 = m/s
+    speed_units[2] = 3.6/1.609344; //2 = mph
+    distance_units[0] = 1;
+    distance_units[1] = 1;
+    distance_units[2] = 1;
+
 }
 void hall_sensor::stopping_function(bool &var_check,bool &is_moving, timer &t_off, timer &t_avg) {
     if(var_check == false) {
         var_check = true;
         t_off.start();
+#if(DEBUG_INFO == 1)
         qDebug() << "Starting timer off - magnet closed" << endl;
+#endif
     }
     if(is_moving == true && t_off.read_time() > stop_time) {
         is_moving = false;
@@ -51,7 +60,9 @@ void hall_sensor::stopping_function(bool &var_check,bool &is_moving, timer &t_of
         emit speed_change(0);
         emit speed_normal();
         emit rpm_change(0);
+#if(DEBUG_INFO == 1)
         qDebug() << "Moving stopped" << endl;
+#endif
     }
 }
 void hall_sensor::on()  {
@@ -60,6 +71,7 @@ void hall_sensor::on()  {
     timer t1;
     timer t_off;
     timer t_avg;
+    long long t_avg_pom = -1;
     QString t_avg_string;
     double t_emit = 0;
     double t_average = 0;  //in miliseconds
@@ -78,8 +90,13 @@ void hall_sensor::on()  {
     while(running) {
 
         if(is_moving == true) {
-          t_avg_string = QString::number(t_avg.read_time()/1000, 'f', 2);
-          emit time_trip_change(t_avg_string);
+            if(static_cast<int>(t_avg.read_time()/100) != t_avg_pom )
+            {
+                t_avg_pom = static_cast<int>(t_avg.read_time()/100);
+                emit time_trip_change(t_avg.read_time());
+            }
+         // t_avg_string = QString::number(t_avg.read_time()/1000, 'f', 1);
+          //emit time_trip_change(t_avg_string);
         }
 
         if(detect()) {
@@ -131,14 +148,16 @@ void hall_sensor::on()  {
                 //update danych na ekran co 1.5 sek
                 if(t_emit > update_time) {
                     t_emit = 0;
-                    emit average_speed_change(distance * 36 / t_average);
-                    emit distance_change(distance/100000);
+                    emit average_speed_change(QString::number(distance * 10 * speed_units[unit_number]/ t_average,'f',1));
+                    emit distance_change(QString::number(distance/100000, 'f',2));
                     emit rpm_change(rpm);
                     emit speed_change(speed * speed_units[unit_number]);
                 }
                 //komunikat danych na konsolę
+#if(DEBUG_INFO == 1)
                 qDebug() << "Magnet detected " << ++magnet_c << " times. " << t/1000 <<" s." << endl <<
                 "Velocity: " << speed << " m/s  "<< speed * 3.6 <<" km/h RPM: " << rpm << endl;
+#endif
             } // end if(no_magnet == true)
             stopping_function(magnet_post_detection,is_moving, t_off, t_avg);
         } //end if(this->detect())

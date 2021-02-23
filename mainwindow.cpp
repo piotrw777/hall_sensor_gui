@@ -8,9 +8,16 @@
 #include "led.h"
 #include "hall_sensor.h"
 #include "thread_inc.h"
+#include "unitchanger.h"
+
 #include <QCloseEvent>
+#include <QDate>
 #include <QMessageBox>
+#include <QTimer>
+#include <QDebug>
 #include <pthread.h>
+
+#define update_date 0
 //#include "circle.h"
 
 /*
@@ -23,27 +30,44 @@ int element::liczba_elementow = 0;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    thread_inc()
+    thread_inc(),
+    unitchgr()
 {
     ui->setupUi(this);
+
     ui->comboBox->addItem("km/h");
     ui->comboBox->addItem("m/s");
     ui->comboBox->addItem("mph");
-    LoadSettings();
+
+    //updating date
+#if(update_date == 1)
+    QTimer *timer = new QTimer(this);
+
+    QObject::connect(timer, &QTimer::timeout, this, &MainWindow::showDate);
+    timer->start(1);
+    showDate();
+#endif
     //change speed
-    QObject::connect(thread_inc.threadC.elem,
-                    SIGNAL(speed_change(double)), ui->lcd_speed, SLOT(display(double)));
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(speed_change(double)), ui->speedmeter, SLOT(changeValue(double)));
     //rpm change
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(rpm_change(int)), ui->lcd_rpm, SLOT(display(int)));
+    //distance change
     QObject::connect(thread_inc.threadC.elem,
-                    SIGNAL(distance_change(double)), ui->lcd_distance, SLOT(display(double)));
+                    SIGNAL(distance_change(QString)), ui->lcd_distance, SLOT(display(QString)));
+    //time trip change
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(time_trip_change(QString)), ui->lcd_time_trip, SLOT(display(QString)));
+
     QObject::connect(thread_inc.threadC.elem,
-                    SIGNAL(average_speed_change(double)), ui->lcd_avg_speed, SLOT(display(double)));
+                     SIGNAL(time_trip_change(double)),
+                     &unitchgr, SLOT(time_trip_change(double)));
+    QObject::connect(&unitchgr, SIGNAL(time_trip_change(QString)),
+                     ui->lcd_time_trip2, SLOT(display(QString)));
+
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(average_speed_change(QString)), ui->lcd_avg_speed, SLOT(display(QString)));
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(speed_limit_exceed()), &thread_inc, SLOT(startThreadB()));
     QObject::connect(thread_inc.threadC.elem,
@@ -62,17 +86,16 @@ MainWindow::MainWindow(QWidget *parent) :
     //change radius
     QObject::connect(ui->spinBox_radius, SIGNAL(valueChanged(int)),
                      thread_inc.threadC.elem, SLOT(change_radius(int)));
+
     //change unit
     //QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
     //                 ui->lcdCombo, SLOT(display(int)));
     QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
                     thread_inc.threadC.elem, SLOT(change_unit(int)));
-    //QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)),
-    //                ui->label_speed, SLOT(setText(QString)));
-
 
     thread_inc.startOrstopThreadA(); //yellow lamp
     thread_inc.startOrstopThreadC(); //hall_sensor
+    LoadSettings();
 }
 
 MainWindow::~MainWindow()
@@ -89,32 +112,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
       //}
 }
 
-void MainWindow::on_pushButton_led_clicked()
-{
-    if(ui->pushButton_led->text() == "Led Off")
-    {
-        ui->pushButton_led->setText("Led On");
-    }
-    else
-    {
-        ui->pushButton_led->setText("Led Off");
-    }
-    thread_inc.startOrstopThreadA();
-}
-
-void MainWindow::on_pushButton_buzzer_clicked()
-{
-    if(ui->pushButton_buzzer->text() == "Buzzer On")
-    {
-        ui->pushButton_buzzer->setText("Buzzer Off");
-    }
-    else
-    {
-        ui->pushButton_buzzer->setText("Buzzer On");
-    }
-    thread_inc.startOrstopThreadB();
-}
-
 void MainWindow::LoadSettings()
 {
     QSettings setting(ORGANIZATION_NAME,APPLICATION_NAME);
@@ -124,6 +121,7 @@ void MainWindow::LoadSettings()
 
     this->setGeometry(rect);
     ui->spinBox_radius->setValue(radius);
+    qDebug() << "Settingsy zaladowane !!!\n";
     ui->comboBox->setCurrentIndex(unit_index);
 }
 
@@ -135,15 +133,25 @@ void MainWindow::SaveSettings()
     setting.setValue("position", this->geometry());
 }
 
-void MainWindow::on_pushButton_kit_clicked()
+void MainWindow::showDate()
 {
-    if(ui->pushButton_kit->text() == "Kit On")
-    {
-        ui->pushButton_kit->setText("Kit Off");
+    QDate date;
+    QTime time;
+    QString dateString;
+    QString timeString;
+
+    date = QDate::currentDate();
+    time = QTime::currentTime();
+
+    dateString = date.toString("dd.MM.yyyy");
+    timeString = time.toString("hh:mm:ss");
+
+    if(time.second() % 2 == 1) {
+        timeString[2] = ' ';
+        timeString[5] = ' ';
     }
-    else
-    {
-        ui->pushButton_kit->setText("Kit On");
+    else {
+
     }
-    thread_inc.startOrstopThreadE();
+    ui->label_date->setText(QString("  ")+dateString+QString("  ")+timeString);
 }

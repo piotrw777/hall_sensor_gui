@@ -4,5 +4,6 @@
         <file>resources/arrow_right.png</file>
         <file>resources/cubes_background.jpg</file>
         <file>resources/shutdown.png</file>
+        <file>resources/tool.png</file>
     </qresource>
 </RCC>

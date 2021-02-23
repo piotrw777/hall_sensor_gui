@@ -9,11 +9,9 @@
 #include <QFile>
 #include <QTextStream>
 #include <QSettings>
-#include "led.h"
-#include "element.h"
-#include "thread_inc.h"
-#include "hall_sensor.h"
 
+#include "thread_inc.h"
+#include "unitchanger.h"
 
 #define ORGANIZATION_NAME "Peter"
 #define ORGANIZATION_DOMAIN "www.com"
@@ -34,19 +32,15 @@ protected:
     void closeEvent(QCloseEvent * event);
 private slots:
 
-void on_pushButton_led_clicked();
-
-void on_pushButton_kit_clicked();
-
-void on_pushButton_buzzer_clicked();
-
 void LoadSettings();
-
 void SaveSettings();
 
 private:
     Ui::MainWindow *ui;
     Thread_Inc thread_inc;
+    unitChanger unitchgr;
+private slots:
+    void showDate();
 };
 
 #endif // MAINWINDOW_H

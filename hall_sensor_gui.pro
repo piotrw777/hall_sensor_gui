@@ -34,7 +34,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     speedometer.cpp \
-    thread_inc.cpp
+    thread_inc.cpp \
+    unitchanger.cpp
 
 HEADERS += \
     headers/buzzer.h \
@@ -47,7 +48,8 @@ HEADERS += \
     headers/thread.h \
     headers/thread_inc.h \
     headers/timer.h \
-    speedometer.h
+    headers/speedometer.h \
+    headers/unitchanger.h
 
 LIBS += -L/usr/local/lib -lwiringPi
 FORMS += \

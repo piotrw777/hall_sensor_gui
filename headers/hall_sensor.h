@@ -15,17 +15,18 @@ private:
     int pin;
     int stop_time;
     int update_time;
-    int delay_time;
+    int delay_time; //msec
     double radius;  //w centymetrach
     long double perimeter; //w centymetrach
     int unit_number;
     double speed_units[3];
+    double distance_units[3];
     double pi;
     bool running;
     bool speed_exceded;
     double speed_limit_value = 16; //[m/s]
     double get_perimeter() const{return perimeter;}
-    inline double velocity(const double &t) const { return (perimeter * 10)/t; }
+    inline double velocity(const double &t) const { return (perimeter * 10)/t; } //m/s
     bool detect() const { return !digitalRead(pin); }
     void stopping_function(bool &var_check,bool &is_moving, timer &t_off, timer &t_avg);
 
@@ -34,10 +35,11 @@ public:
 
 signals:
     void speed_change(double);
-    void distance_change(double);
+    void distance_change(QString);
     void rpm_change(int);
     void time_trip_change(QString);
-    void average_speed_change(double);
+    void time_trip_change(double);
+    void average_speed_change(QString);
     void speed_limit_exceed();
     void speed_normal();
     void start_moving();

@@ -7,6 +7,8 @@
 #include <QFont>
 #include <QVector>
 
+#define drawPomRects 0
+
 speedometer::speedometer(QWidget *parent) : QWidget(parent)
 {
     val = 0;
@@ -17,16 +19,18 @@ double cosd(double r) {
 double sind(double r) {
     return sin(3.141592653589*r/180);
 }
-
+QRectF createQRectF(QPointF center, qreal width, qreal height) {
+    QPointF pom(width/2, height/2);
+    return QRectF(center-pom, center+pom);
+}
 void speedometer::paintEvent(QPaintEvent *event)
 {
 
-    //static const double pi = 3.1415926535;
     const int W = 200;
     const int T = 160;
     const int Re = 10;
     const int R = 8;
-    const int CP = 180;
+    const int CP = 185;
     const int ANGLE = 270;
     const int regions = 20;
 
@@ -35,6 +39,7 @@ void speedometer::paintEvent(QPaintEvent *event)
     painter.setViewport( (width()-side)/2, (height()-side)/2, side, side);
     painter.setWindow(-W,-W, 2*W, 2*W);
     painter.setRenderHint(QPainter::Antialiasing);
+    //painter.translate(0,50);
 
     QPoint A(-T, -T);
     QPoint B(T, T);
@@ -52,6 +57,9 @@ void speedometer::paintEvent(QPaintEvent *event)
     painter.setBrush(pieBrush);
     painter.drawPie(P,-16*(ANGLE/2.0-90), ANGLE*16);
 
+#if(drawPomRects == 1)
+    painter.drawRect(createQRectF(QPointF(0,0), side, side));
+#endif
     //draw central circle
     QPoint A1(-Re, -Re);
     QPoint B1(Re, Re);
@@ -105,6 +113,28 @@ void speedometer::paintEvent(QPaintEvent *event)
     }
     painter.restore();
 
+    //printing speed and units
+    QRectF unitLabelRect = createQRectF(QPointF(0,-80), 60, 30);
+    QRectF speedLabelRect = createQRectF(QPointF(0,80), 80, 40);
+    //arcPainter.drawRect(unitLabelRect);
+    //arcPainter.drawRect(speedLabelRect);
+
+    QFont speedFont;
+    speedFont.setFamily("Tahoma");
+    speedFont.setPointSize(14);
+
+    QFont unitFont;
+    speedFont.setFamily("Tahoma");
+    speedFont.setPointSize(20);
+
+    painter.setPen(Qt::white);
+    painter.setBrush(Qt::white);
+    painter.setFont(unitFont);
+    painter.drawText(unitLabelRect,Qt::AlignCenter, "km/h");
+
+    painter.setFont(speedFont);
+    painter.drawText(speedLabelRect,Qt::AlignCenter, QString::number(val, 'f',1));
+
     //draw arrow
     QPointF R1(-R/sqrt(2),-R/sqrt(2));
     QPointF R2(R/sqrt(2), R/sqrt(2));
@@ -126,7 +156,6 @@ void speedometer::paintEvent(QPaintEvent *event)
     painter.drawConvexPolygon(ArrowPoints, 3);
     painter.restore();
 
-
     //koło pomocnicze
 //    QPainter pomCircle(this);
 //    QRect CPRect(-CP, -CP, 2*CP, 2*CP);
@@ -139,15 +168,12 @@ void speedometer::paintEvent(QPaintEvent *event)
 //    pomCircle.setPen(pomCirclePen);
 //    pomCircle.drawEllipse(CPRect);
 
-
     //punkty pomocnicze
 
     QVector<QPoint> centralPoints;
-
     for(int k = 0; k < 21; k++) {
         centralPoints.push_back(QPoint(CP*cosd(225-k*13.5), -CP*sind(225-k*13.5)));
     }
-
 
 //    QPainter pointsPainter(this);
 //    pointsPainter.setWindow(-W,-W, 2*W, 2*W);
@@ -186,13 +212,13 @@ void speedometer::paintEvent(QPaintEvent *event)
         v += 5;
     }
 
+    //drawing arc
     QPen arcPen(Qt::red);
     arcPen.setWidth(5);
     arcPen.setCapStyle(Qt::FlatCap);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(arcPen);
     painter.drawArc(P,225*16-16*2.7*val,16*2.7*val);
-
 }
 
 void speedometer::changeValue(double newval)
