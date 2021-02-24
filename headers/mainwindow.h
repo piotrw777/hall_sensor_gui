@@ -38,7 +38,7 @@ void SaveSettings();
 private:
     Ui::MainWindow *ui;
     Thread_Inc thread_inc;
-    unitChanger unitchgr;
+    //unitChanger unitchgr;
 private slots:
     void showDate();
 };

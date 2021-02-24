@@ -2,6 +2,8 @@
 #define SPEEDOMETER_H
 
 #include <QWidget>
+#include <QVector>
+#include <QString>
 
 class speedometer : public QWidget
 {
@@ -12,14 +14,17 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event);
+
 signals:
 
 public slots:
     void changeValue(double);
+    void change_unitNr(int);
 
 private:
     double val;
-
+    int unitNr;
+    QVector<QString> speed_suffixes;
 };
 
 #endif // SPEEDOMETER_H

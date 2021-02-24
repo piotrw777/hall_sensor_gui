@@ -10,6 +10,7 @@
 #include <iostream>
 #include <QDebug>
 #include <QString>
+#include <QVector>
 
 using namespace std;
 
@@ -21,28 +22,52 @@ inline double round_1(double x)
 {
     return static_cast<long long>(x * 10)/10.0;
 }
+QString QStr_from_msec(double time)
+{
+    int hours = static_cast<int>(time/3600000.0);
+    int minutes = static_cast<int>((time - hours*3600000)/60000.0);
+    int seconds = static_cast<int>((time - hours*3600000-minutes*60000)/1000);
+    int miliseconds = static_cast<int>(time - hours*3600000-minutes*60000-1000*seconds);
+
+    QString timeStr(8, ' ');
+    timeStr[0] = '0'+ hours/10;
+    timeStr[1] = '0' + hours % 10;
+    timeStr[2] = timeStr[5] = ':';
+    timeStr[3] = '0'+ minutes/10;
+    timeStr[4] = '0' + minutes % 10;
+    timeStr[6] = '0'+ seconds/10;
+    timeStr[7] = '0' + seconds % 10;
+    return timeStr;
+}
+
 hall_sensor::hall_sensor(QObject *parent) : QObject(parent)
 {
     pin = 18;
     pinMode(pin,INPUT);
     pi = 3.1415926535;
     radius = 33; //in cm
+    unit_number = 0;
     qDebug() << "Promien ustawiony w konstruktorze!!!\n";
     perimeter = 2*pi*radius;
     stop_time = 1500;  //msec
     update_time = 500;  //msec
-    delay_time = 5;
+    update_speed_time = 150; //msc
+    delay_time = 1;
     running = false;
     speed_exceded = false;
     speed_limit_value = 16.66;
     unit_number = 0;
-    speed_units[0] = 3.6; //0 = km/h
-    speed_units[1] = 1;   //1 = m/s
-    speed_units[2] = 3.6/1.609344; //2 = mph
-    distance_units[0] = 1;
-    distance_units[1] = 1;
-    distance_units[2] = 1;
+    speed_coefficients[0]= 3.6;
+    speed_coefficients[1] = 1;
+    speed_coefficients[2] = 3.6/1.609344;
+    //speed_suffixes = {"km/h", "m/s", "mph"};
+    speed_suffixes.push_back("km/h");
+    speed_suffixes.push_back("m/s");
+    speed_suffixes.push_back("mph");
 
+    distance_coefficients[0] = 0.001;
+    distance_coefficients[1] = 1;
+    distance_coefficients[2] = 0.0006213727366;
 }
 void hall_sensor::stopping_function(bool &var_check,bool &is_moving, timer &t_off, timer &t_avg) {
     if(var_check == false) {
@@ -74,6 +99,7 @@ void hall_sensor::on()  {
     long long t_avg_pom = -1;
     QString t_avg_string;
     double t_emit = 0;
+    double t_speed_emit = 0;
     double t_average = 0;  //in miliseconds
 
     bool stat = false;
@@ -93,10 +119,8 @@ void hall_sensor::on()  {
             if(static_cast<int>(t_avg.read_time()/100) != t_avg_pom )
             {
                 t_avg_pom = static_cast<int>(t_avg.read_time()/100);
-                emit time_trip_change(t_avg.read_time());
+                emit time_trip_change(QStr_from_msec(t_avg.read_time()));
             }
-         // t_avg_string = QString::number(t_avg.read_time()/1000, 'f', 1);
-          //emit time_trip_change(t_avg_string);
         }
 
         if(detect()) {
@@ -132,7 +156,8 @@ void hall_sensor::on()  {
                 }
                 t_average += t;
                 t_emit += t;
-                speed = velocity(t);
+                t_speed_emit += t;
+                speed = velocity(t); //m/s
                 rpm = static_cast<int>(60000.0/t);
                 distance += get_perimeter();
 
@@ -145,13 +170,18 @@ void hall_sensor::on()  {
                     speed_exceded = false;
                     emit speed_normal();
                 }
+                QString aa(2,'a');
                 //update danych na ekran co 1.5 sek
                 if(t_emit > update_time) {
                     t_emit = 0;
-                    emit average_speed_change(QString::number(distance * 10 * speed_units[unit_number]/ t_average,'f',1));
-                    emit distance_change(QString::number(distance/100000, 'f',2));
+                    emit average_speed_change(QString::number((distance * 10 *speed_coefficients[unit_number] / t_average),'f',1)); //
+                    emit distance_change(QString::number(distance/100*distance_coefficients[unit_number],'f',2)); // w m
                     emit rpm_change(rpm);
-                    emit speed_change(speed * speed_units[unit_number]);
+
+                }
+                if(t_speed_emit > update_speed_time) {
+                    t_speed_emit = 0;
+                    emit speed_change(speed*speed_coefficients[unit_number]); //speed w m/s
                 }
                 //komunikat danych na konsolę
 #if(DEBUG_INFO == 1)
@@ -171,7 +201,7 @@ void hall_sensor::on()  {
 void hall_sensor::change_unit(int newk)
 {
     unit_number = newk;
-}  //end on function
+}
 
 /*
 void hall_sensor::on()  {

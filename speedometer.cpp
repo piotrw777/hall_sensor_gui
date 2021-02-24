@@ -11,7 +11,9 @@
 
 speedometer::speedometer(QWidget *parent) : QWidget(parent)
 {
+    unitNr = 0;
     val = 0;
+    speed_suffixes = {"km/h", "m/s", "mph"};
 }
 double cosd(double r) {
     return cos(3.141592653589*r/180);
@@ -25,7 +27,6 @@ QRectF createQRectF(QPointF center, qreal width, qreal height) {
 }
 void speedometer::paintEvent(QPaintEvent *event)
 {
-
     const int W = 200;
     const int T = 160;
     const int Re = 10;
@@ -101,7 +102,6 @@ void speedometer::paintEvent(QPaintEvent *event)
     painter.setPen(linePen);
     painter.drawLine(L1, L2);
 
-
     painter.save();
     for(int k = 0; k < regions; k++) {
         painter.rotate(1.0*ANGLE/regions);
@@ -130,7 +130,7 @@ void speedometer::paintEvent(QPaintEvent *event)
     painter.setPen(Qt::white);
     painter.setBrush(Qt::white);
     painter.setFont(unitFont);
-    painter.drawText(unitLabelRect,Qt::AlignCenter, "km/h");
+    painter.drawText(unitLabelRect,Qt::AlignCenter, speed_suffixes[unitNr]);
 
     painter.setFont(speedFont);
     painter.drawText(speedLabelRect,Qt::AlignCenter, QString::number(val, 'f',1));
@@ -143,10 +143,10 @@ void speedometer::paintEvent(QPaintEvent *event)
     QPointF ArrowPoints[3]={R1, R2, R3};
     QPen arrowPen(Qt::NoPen);
     QLinearGradient arrowgrad(QPoint(0,0), R3);
-    arrowgrad.setColorAt(0, Qt::green);
-    arrowgrad.setColorAt(0.6, Qt::white);
-    arrowgrad.setColorAt(0.9,Qt::yellow);
-    QBrush arrowBrush(Qt::green);
+    arrowgrad.setColorAt(0, QColor(100, 250, 180));
+    arrowgrad.setColorAt(0.6, QColor(80, 180, 20));
+    arrowgrad.setColorAt(0.9,QColor(200, 230, 240));
+    QBrush arrowBrush(arrowgrad);
 
     painter.setBrush(arrowBrush);
     painter.setPen(arrowPen);
@@ -224,5 +224,11 @@ void speedometer::paintEvent(QPaintEvent *event)
 void speedometer::changeValue(double newval)
 {
     val = newval;
+    update();
+}
+
+void speedometer::change_unitNr(int newNr)
+{
+    unitNr = newNr;
     update();
 }

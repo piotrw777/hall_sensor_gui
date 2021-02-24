@@ -6,6 +6,7 @@
 
 #include "element.h"
 #include "timer.h"
+#include <QVector>
 #include <QObject>
 #include <QString>
 
@@ -15,12 +16,14 @@ private:
     int pin;
     int stop_time;
     int update_time;
+    int update_speed_time;
     int delay_time; //msec
     double radius;  //w centymetrach
     long double perimeter; //w centymetrach
     int unit_number;
-    double speed_units[3];
-    double distance_units[3];
+    double speed_coefficients[3];
+    QVector< QString> speed_suffixes;
+    double distance_coefficients[3];
     double pi;
     bool running;
     bool speed_exceded;
@@ -35,6 +38,7 @@ public:
 
 signals:
     void speed_change(double);
+    //void speed_change(QString);
     void distance_change(QString);
     void rpm_change(int);
     void time_trip_change(QString);

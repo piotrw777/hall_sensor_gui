@@ -1,9 +1,36 @@
 #include "unitchanger.h"
 #include <QTime>
+#include <QString>
 
 unitChanger::unitChanger(QObject *parent) : QObject(parent)
 {
+    unitNumber = 0;
+    speed_coefficients = {3.6, 1, 3.6/1.609344};
+    distance_coefficients = {0.001, 1, 0.0006213727366};
+    speed_suffixes = {"km/h", "m/s", "mph"};
+    distance_suffixes = {"km", "m", "mi"};
     time_trip = 0;
+    speed = 0;
+}
+
+double unitChanger::get_speed_unit()
+{
+    return speed_coefficients[unitNumber];
+}
+
+double unitChanger::get_distance_units()
+{
+    return distance_coefficients[unitNumber];
+}
+
+QString unitChanger::get_speed_suffix()
+{
+    return speed_suffixes[unitNumber];
+}
+
+QString unitChanger::get_distance_suffix()
+{
+    return distance_suffixes[unitNumber];
 }
 
 void unitChanger::time_trip_change(double time)
@@ -28,5 +55,18 @@ void unitChanger::time_trip_change(double time)
         timeStr[9] = '0'+ miliseconds/100;
 
         emit time_trip_change(timeStr);
+    }
+}
+
+void unitChanger::change_unitNumber(int newNr)
+{
+    unitNumber = newNr;
+}
+void unitChanger::speed_change(double speed_hall)
+{
+    if(speed_hall != speed) {
+        QString speedStr = QString::number(speed_hall*speed_coefficients[unitNumber],'f',1);
+        speed = speed_hall;
+        emit speed_change(speedStr);
     }
 }

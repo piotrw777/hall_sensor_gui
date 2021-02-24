@@ -17,7 +17,7 @@
 #include <QDebug>
 #include <pthread.h>
 
-#define update_date 0
+#define update_date 1
 //#include "circle.h"
 
 /*
@@ -30,8 +30,8 @@ int element::liczba_elementow = 0;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    thread_inc(),
-    unitchgr()
+    thread_inc()
+    //unitchgr()
 {
     ui->setupUi(this);
 
@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QTimer *timer = new QTimer(this);
 
     QObject::connect(timer, &QTimer::timeout, this, &MainWindow::showDate);
-    timer->start(1);
+    timer->start(1000);
     showDate();
 #endif
     //change speed
@@ -59,15 +59,10 @@ MainWindow::MainWindow(QWidget *parent) :
     //time trip change
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(time_trip_change(QString)), ui->lcd_time_trip, SLOT(display(QString)));
-
-    QObject::connect(thread_inc.threadC.elem,
-                     SIGNAL(time_trip_change(double)),
-                     &unitchgr, SLOT(time_trip_change(double)));
-    QObject::connect(&unitchgr, SIGNAL(time_trip_change(QString)),
-                     ui->lcd_time_trip2, SLOT(display(QString)));
-
+    //average_speed_change
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(average_speed_change(QString)), ui->lcd_avg_speed, SLOT(display(QString)));
+    //speed limit buzzer
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(speed_limit_exceed()), &thread_inc, SLOT(startThreadB()));
     QObject::connect(thread_inc.threadC.elem,
@@ -87,11 +82,17 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->spinBox_radius, SIGNAL(valueChanged(int)),
                      thread_inc.threadC.elem, SLOT(change_radius(int)));
 
-    //change unit
+    //comboBox -> unitchgr
     //QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
-    //                 ui->lcdCombo, SLOT(display(int)));
+      //               &unitchgr, SLOT(change_unitNumber(int)));
+
+    //comboBox -> hall sensor
     QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
                     thread_inc.threadC.elem, SLOT(change_unit(int)));
+
+    //comboBox -> speedometer
+    QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
+                    ui->speedmeter, SLOT(change_unitNr(int)));
 
     thread_inc.startOrstopThreadA(); //yellow lamp
     thread_inc.startOrstopThreadC(); //hall_sensor
