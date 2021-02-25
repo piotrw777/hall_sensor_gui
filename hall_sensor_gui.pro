@@ -28,6 +28,7 @@ CONFIG += c++11
 INCLUDEPATH += ./headers
 
 SOURCES += \
+    dialog.cpp \
     hall_sensor.cpp \
     led_kit.cpp \
     led_state.cpp \
@@ -38,6 +39,7 @@ SOURCES += \
     unitchanger.cpp
 
 HEADERS += \
+    dialog.h \
     headers/buzzer.h \
     headers/element.h \
     headers/hall_sensor.h \

@@ -39,8 +39,11 @@ private:
     Ui::MainWindow *ui;
     Thread_Inc thread_inc;
     //unitChanger unitchgr;
+
 private slots:
     void showDate();
+    void startDialog();
+    void on_pushButton_settings_clicked();
 };
 
 #endif // MAINWINDOW_H

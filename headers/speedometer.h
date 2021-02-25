@@ -12,6 +12,15 @@ public:
     explicit speedometer(QWidget *parent = nullptr);
     ~speedometer(){}
 
+    int getAngle() const;
+    void setAngle(int value);
+
+    int getMax_speed() const;
+    void setMax_speed(int value);
+
+    int getStep() const;
+    void setStep(int value);
+
 protected:
     void paintEvent(QPaintEvent *event);
 
@@ -24,6 +33,13 @@ public slots:
 private:
     double val;
     int unitNr;
+    int angle;
+    int max_speed;
+    int step;
+    int regions;
+    double unitSpeedAngle;
+    double ticksAngle;
+
     QVector<QString> speed_suffixes;
 };
 

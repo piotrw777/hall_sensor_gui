@@ -3,13 +3,14 @@
 //=============================================================
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <wiringPi.h>
 #include "element.h"
 #include "led.h"
 #include "hall_sensor.h"
 #include "thread_inc.h"
 #include "unitchanger.h"
+#include "dialog.h"
 
+#include <wiringPi.h>
 #include <QCloseEvent>
 #include <QDate>
 #include <QMessageBox>
@@ -155,4 +156,27 @@ void MainWindow::showDate()
 
     }
     ui->label_date->setText(QString("  ")+dateString+QString("  ")+timeString);
+}
+void MainWindow::startDialog()
+{
+    Dialog *mydialog = new Dialog(this);
+    QObject::connect(mydialog, &Dialog::angleChanged, ui->speedmeter, &speedometer::setAngle);
+    QObject::connect(mydialog, &Dialog::maxSpeedChanged, ui->speedmeter, &speedometer::setMax_speed);
+    QObject::connect(mydialog, &Dialog::stepChanged, ui->speedmeter, &speedometer::setStep);
+
+    mydialog->setModal(false);
+    mydialog->show();
+    mydialog->activateWindow();
+}
+void MainWindow::on_pushButton_settings_clicked()
+{
+    startDialog();
+
+//    QObject::connect(mydialog, &Dialog::redChanged, this, &MainWindow::setArrowColor1);
+//    QObject::connect(mydialog, &Dialog::greenChanged, this, &MainWindow::setArrowColor2);
+//    QObject::connect(mydialog, &Dialog::blueChanged, this, &MainWindow::setArrowColor3);
+
+//    QObject::connect(mydialog, &Dialog::max_speedChanged, this, &MainWindow::setMax_speed);
+//    QObject::connect(mydialog, &Dialog::stepChanged, this, &MainWindow::setStep);
+
 }

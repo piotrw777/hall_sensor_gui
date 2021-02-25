@@ -14,6 +14,9 @@ speedometer::speedometer(QWidget *parent) : QWidget(parent)
     unitNr = 0;
     val = 0;
     speed_suffixes = {"km/h", "m/s", "mph"};
+    angle = 270;
+    max_speed = 100;
+    step = 10;
 }
 double cosd(double r) {
     return cos(3.141592653589*r/180);
@@ -32,8 +35,10 @@ void speedometer::paintEvent(QPaintEvent *event)
     const int Re = 10;
     const int R = 8;
     const int CP = 185;
-    const int ANGLE = 270;
-    const int regions = 20;
+    double stretch_angle = 90+angle/2.0;
+    regions = 2*max_speed/step;
+    unitSpeedAngle = static_cast<double>(angle)/max_speed;
+    ticksAngle = static_cast<double>(angle)/regions;
 
     int side = qMin(width(), height());
     QPainter painter(this);
@@ -56,7 +61,7 @@ void speedometer::paintEvent(QPaintEvent *event)
 
     painter.setPen(piePen);
     painter.setBrush(pieBrush);
-    painter.drawPie(P,-16*(ANGLE/2.0-90), ANGLE*16);
+    painter.drawPie(P,-16*(angle/2.0-90), angle*16);
 
 #if(drawPomRects == 1)
     painter.drawRect(createQRectF(QPointF(0,0), side, side));
@@ -68,9 +73,13 @@ void speedometer::paintEvent(QPaintEvent *event)
 
     QPen ellipsePen(Qt::green);
     ellipsePen.setWidth(1);
-    QBrush ellipseBrush(Qt::green);
 
-    painter.setPen(Qt::NoPen);
+//    QRadialGradient grad3(QPointF(0,0),10);
+//    grad3.setColorAt(0,QColor(100, 250, 180));
+//    grad3.setColorAt(0.4,QColor(80, 180, 20));
+//    grad3.setColorAt(0.9,QColor(200, 230, 240));
+
+    QBrush ellipseBrush(Qt::green);
     painter.setBrush(ellipseBrush);
     painter.drawEllipse(P1);
 
@@ -93,9 +102,20 @@ void speedometer::paintEvent(QPaintEvent *event)
 //    pomRecPainter.rotate(27);
 //    pomRecPainter.drawRect(pomRec);
 
-    QPoint L1(-T/sqrt(2), T/sqrt(2));
-    QPoint L2(-T/1.7,T/1.7);
-    QPoint L3(-T/1.5,T/1.5);
+//    QPoint L1(-T/sqrt(2), T/sqrt(2));
+//    QPoint L2(-T/1.7,T/1.7);
+//    QPoint L3(-T/1.5,T/1.5);
+
+    double beta = 180-angle/2.0;
+    double coeff1 = 1.4142/1.7;
+    double coeff2 = 1.4142/1.5;
+
+    double rotsin = sind(beta);
+    double rotcos = cosd(beta);
+
+    QPoint L1(-T*rotsin, T*cosd(beta));
+    QPoint L2(-T*rotsin*coeff1,T*rotcos*coeff1);
+    QPoint L3(-T*rotsin*coeff2,T*rotcos*coeff2);
 
     QPen linePen(Qt::yellow);
     linePen.setWidth(2);
@@ -104,7 +124,7 @@ void speedometer::paintEvent(QPaintEvent *event)
 
     painter.save();
     for(int k = 0; k < regions; k++) {
-        painter.rotate(1.0*ANGLE/regions);
+        painter.rotate(ticksAngle);
         if(k % 2 == 0) {
             painter.drawLine(L1, L3);
         }
@@ -122,6 +142,7 @@ void speedometer::paintEvent(QPaintEvent *event)
     QFont speedFont;
     speedFont.setFamily("Tahoma");
     speedFont.setPointSize(14);
+    speedFont.setBold(true);
 
     QFont unitFont;
     speedFont.setFamily("Tahoma");
@@ -136,9 +157,17 @@ void speedometer::paintEvent(QPaintEvent *event)
     painter.drawText(speedLabelRect,Qt::AlignCenter, QString::number(val, 'f',1));
 
     //draw arrow
-    QPointF R1(-R/sqrt(2),-R/sqrt(2));
-    QPointF R2(R/sqrt(2), R/sqrt(2));
-    QPointF R3(-T/sqrt(2), T/sqrt(2));
+//    QPointF R1(-R/sqrt(2),-R/sqrt(2));
+//    QPointF R2(R/sqrt(2), R/sqrt(2));
+//    QPointF R3(-T/sqrt(2), T/sqrt(2));
+
+//    QPointF R1(-R*rotsin,-R*rotcos);
+//    QPointF R2(R*rotsin, R*rotcos);
+//    QPointF R3(-T*rotsin, T*rotcos);
+
+    QPointF R1(-R, 0);
+    QPointF R2(R, 0);
+    QPointF R3(0, T);
 
     QPointF ArrowPoints[3]={R1, R2, R3};
     QPen arrowPen(Qt::NoPen);
@@ -152,7 +181,7 @@ void speedometer::paintEvent(QPaintEvent *event)
     painter.setPen(arrowPen);
 
     painter.save();
-    painter.rotate(val*2.7);
+    painter.rotate(beta+val*unitSpeedAngle);
     painter.drawConvexPolygon(ArrowPoints, 3);
     painter.restore();
 
@@ -171,8 +200,8 @@ void speedometer::paintEvent(QPaintEvent *event)
     //punkty pomocnicze
 
     QVector<QPoint> centralPoints;
-    for(int k = 0; k < 21; k++) {
-        centralPoints.push_back(QPoint(CP*cosd(225-k*13.5), -CP*sind(225-k*13.5)));
+    for(int k = 0; k < regions + 1; k++) {
+        centralPoints.push_back(QPoint(CP*cosd(stretch_angle-k*ticksAngle), -CP*sind(stretch_angle-k*ticksAngle)));
     }
 
 //    QPainter pointsPainter(this);
@@ -186,39 +215,34 @@ void speedometer::paintEvent(QPaintEvent *event)
 //        pointsPainter.drawPoint(centralPoints[k]);
 //    }
 
-
     QPainter textpainter(this);
     textpainter.setViewport( (width()-side)/2, (height()-side)/2, side, side);
     textpainter.setWindow(-W,-W, 2*W, 2*W);
 
+    //draw speed values
     QFont myFont;
     myFont.setFamily("Tahoma");
     myFont.setPointSize(14);
 
-    QFont myFont2;
-    myFont2.setFamily("Arial");
-    myFont2.setPointSize(10);
-    textpainter.setFont(myFont);
-
     int v = 0;
-    for(int k = 0; k < 21; k++) {
-        if(k%2 == 0) {
-            textpainter.setFont(myFont);
-        }
-        else {
-            textpainter.setFont(myFont2);
-        }
-        if(k% 2 == 0) textpainter.drawText(QRectF(centralPoints[k]-QPoint(20,20),centralPoints[k]+QPoint(20,20)),Qt::AlignCenter, QString::number(v));
-        v += 5;
+    for(int k = 0; k < regions + 1; k = k + 2) {
+         textpainter.drawText(QRectF(centralPoints[k]-QPoint(20,20),centralPoints[k]+QPoint(20,20)),Qt::AlignCenter, QString::number(v));
+         v += step;
     }
 
     //drawing arc
+    QRadialGradient grad2(QPoint(0,0), 180);
+    grad2.setColorAt(0.0, QColor(255, 255, 255, 100));
+    grad2.setColorAt(0.5, QColor(0,0,250, 100));
+    grad2.setColorAt(1.0, QColor(250,0,0,100));
     QPen arcPen(Qt::red);
     arcPen.setWidth(5);
     arcPen.setCapStyle(Qt::FlatCap);
+
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(arcPen);
-    painter.drawArc(P,225*16-16*2.7*val,16*2.7*val);
+    painter.setBrush(grad2);
+    painter.drawArc(P,stretch_angle*16-16*unitSpeedAngle*val,16*unitSpeedAngle*val);
 }
 
 void speedometer::changeValue(double newval)
@@ -230,5 +254,38 @@ void speedometer::changeValue(double newval)
 void speedometer::change_unitNr(int newNr)
 {
     unitNr = newNr;
+    update();
+}
+
+int speedometer::getStep() const
+{
+    return step;
+}
+
+void speedometer::setStep(int value)
+{
+    step = value;
+    update();
+}
+
+int speedometer::getMax_speed() const
+{
+    return max_speed;
+}
+
+void speedometer::setMax_speed(int value)
+{
+    max_speed = value;
+    update();
+}
+
+int speedometer::getAngle() const
+{
+    return angle;
+}
+
+void speedometer::setAngle(int value)
+{
+    angle = value;
     update();
 }
