@@ -9,6 +9,7 @@ Dialog::Dialog(QWidget *parent) :
     QObject::connect(ui->spinBox_Angle, SIGNAL(valueChanged(int)),this, SLOT(setAngle(int)));
     QObject::connect(ui->spinBox_MaxSpeed, SIGNAL(valueChanged(int)),this, SLOT(setMaxSpeed(int)));
     QObject::connect(ui->spinBox_Step, SIGNAL(valueChanged(int)),this, SLOT(setStep(int)));
+    QObject::connect(this,&Dialog::rejected, this, &Dialog::restore_values);
 }
 
 Dialog::~Dialog()
@@ -22,7 +23,6 @@ void Dialog::setAngle(int value)
         angle = value;
         emit angleChanged(value);
     }
-
 }
 void Dialog::setMaxSpeed(int value)
 {
@@ -39,6 +39,23 @@ void Dialog::setStep(int value)
         step = value;
         emit stepChanged(value);
     }
+}
+
+void Dialog::restore_values()
+{
+    this->angle = present_angle;
+    this->maxSpeed = present_maxSpeed;
+    this->step = present_step;
+}
+
+void Dialog::setPresentValues(int angleVal, int maxSpeedVal, int stepVal)
+{
+    ui->spinBox_Angle->setValue(angleVal);
+    ui->spinBox_MaxSpeed->setValue(maxSpeedVal);
+    ui->spinBox_Step->setValue(stepVal);
+    present_angle = angleVal;
+    present_maxSpeed = maxSpeedVal;
+    present_step = stepVal;
 }
 
 //get functions
@@ -62,5 +79,6 @@ void Dialog::on_pushButton_OK_clicked()
 
 void Dialog::on_pushButton_Cancel_clicked()
 {
+
     this->reject();
 }

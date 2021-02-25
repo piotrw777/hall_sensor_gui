@@ -28,6 +28,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void send_data_to_dialog(int angle, int maxSpeed, int step);
+
 protected:
     void closeEvent(QCloseEvent * event);
 private slots:

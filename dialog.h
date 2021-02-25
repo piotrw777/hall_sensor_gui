@@ -19,6 +19,9 @@ public:
     int getMaxSpeed() const;
     int getStep() const;
 
+public slots:
+    void setPresentValues(int angleVal, int maxSpeedVal, int stepVal);
+
 signals:
     void angleChanged(int);
     void maxSpeedChanged(int);
@@ -31,8 +34,13 @@ private slots:
     void setAngle(int value);
     void setMaxSpeed(int value);
     void setStep(int value);
+    void restore_values();
+
 private:
     Ui::Dialog *ui;
+    int present_angle;
+    int present_maxSpeed;
+    int present_step;
     int angle;
     int maxSpeed;
     int step;
