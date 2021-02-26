@@ -159,7 +159,8 @@ void hall_sensor::on()  {
                 t_speed_emit += t;
                 speed = velocity(t); //m/s
                 rpm = static_cast<int>(60000.0/t);
-                distance += get_perimeter();
+                distance += perimeter;
+                emit add_to_total_distance(perimeter/100*distance_coefficients[unit_number]);
 
                 //przekroczenie prędkości
                 if(speed  >= speed_limit_value && speed_exceded == false) {
@@ -170,7 +171,6 @@ void hall_sensor::on()  {
                     speed_exceded = false;
                     emit speed_normal();
                 }
-                QString aa(2,'a');
                 //update danych na ekran co 1.5 sek
                 if(t_emit > update_time) {
                     t_emit = 0;

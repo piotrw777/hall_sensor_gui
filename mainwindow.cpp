@@ -66,6 +66,11 @@ MainWindow::MainWindow(QWidget *parent) :
     //average_speed_change
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(average_speed_change(QString)), ui->lcd_avg_speed, SLOT(display(QString)));
+    //total distance_change
+    QObject::connect(thread_inc.threadC.elem,
+                    SIGNAL(add_to_total_distance(double)),&total, SLOT(increaseValue(double)));
+    QObject::connect(&total,
+                            SIGNAL(valueChanged(QString)),ui->lcd_total, SLOT(display(QString)));
     //speed limit buzzer
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(speed_limit_exceed()), &thread_inc, SLOT(startThreadB()));
@@ -85,7 +90,11 @@ MainWindow::MainWindow(QWidget *parent) :
     //change radius
     QObject::connect(ui->spinBox_radius, SIGNAL(valueChanged(int)),
                      thread_inc.threadC.elem, SLOT(change_radius(int)));
+    //reset trip
+    QObject::connect(thread_inc.threadF.elem, SIGNAL(button_long_press()),thread_inc.threadC.elem , SLOT(restart_trip()));
 
+    //reset total
+    QObject::connect(ui->pushButton_reset_total, &QPushButton::clicked, &total, &value_double::resetValue);
     //comboBox -> unitchgr
     //QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
       //               &unitchgr, SLOT(change_unitNumber(int)));
@@ -97,6 +106,11 @@ MainWindow::MainWindow(QWidget *parent) :
     //comboBox -> speedometer
     QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
                     ui->speedmeter, SLOT(change_unitNr(int)));
+
+    //comboBox -> value_double
+    QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
+                    &total, SLOT(change_unit(int)));
+
 
     //main button
     QObject::connect(thread_inc.threadH.elem, SIGNAL(button_pressed()), this, SLOT(next_edit_state()));
@@ -130,12 +144,15 @@ void MainWindow::LoadSettings()
     QSettings setting(ORGANIZATION_NAME,APPLICATION_NAME);
     int radius = setting.value("radius").toInt();
     int unit_index = setting.value("units").toInt();
+    double total_distance = setting.value("total").toDouble();
     QRect rect = setting.value("position").toRect();
 
     this->setGeometry(rect);
     ui->spinBox_radius->setValue(radius);
     qDebug() << "Settingsy zaladowane !!!\n";
     ui->comboBox->setCurrentIndex(unit_index);
+    this->total.change_unit(unit_index);
+    this->total.changeValue(total_distance);
 }
 
 void MainWindow::SaveSettings()
@@ -144,6 +161,7 @@ void MainWindow::SaveSettings()
     setting.setValue("units", ui->comboBox->currentIndex());
     setting.setValue("radius", ui->spinBox_radius->value());
     setting.setValue("position", this->geometry());
+    setting.setValue("total",this->total.getValue());
 }
 
 void MainWindow::showDate()
@@ -183,7 +201,7 @@ void MainWindow::startDialog()
     QObject::connect(thread_inc.threadH.elem, SIGNAL(button_pressed()), &mydialog->main_button_counter, SLOT(increaseValue()));
 
     //reset trip
-    QObject::connect(thread_inc.threadF.elem, SIGNAL(button_long_press()),thread_inc.threadC.elem , SLOT(restart_trip()));
+
     mydialog->setModal(false);
     mydialog->show();
     mydialog->activateWindow();

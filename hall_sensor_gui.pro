@@ -38,7 +38,8 @@ SOURCES += \
     speedometer.cpp \
     thread_inc.cpp \
     unitchanger.cpp \
-    value.cpp
+    value.cpp \
+    value_double.cpp
 
 HEADERS += \
     button.h \
@@ -55,7 +56,8 @@ HEADERS += \
     headers/timer.h \
     headers/speedometer.h \
     headers/unitchanger.h \
-    value.h
+    value.h \
+    value_double.h
 
 LIBS += -L/usr/local/lib -lwiringPi
 FORMS += \

@@ -31,7 +31,7 @@ private:
     bool running;
     bool speed_exceded;
     double speed_limit_value = 16; //[m/s]
-    double get_perimeter() const{return perimeter;}
+    double get_perimeter() const {return perimeter;}
     inline double velocity(const double &t) const { return (perimeter * 10)/t; } //m/s
     bool detect() const { return !digitalRead(pin); }
     void stopping_function(bool &var_check,bool &is_moving, timer &t_off, timer &t_avg);
@@ -51,6 +51,7 @@ signals:
     void speed_normal();
     void start_moving();
     void stop_moving();
+    void add_to_total_distance(double);
 
 public slots:
     void on();

@@ -200,6 +200,29 @@ color: black;
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="pushButton_reset_total">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/images/resources/refresh.png</normaloff>:/images/resources/refresh.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="default">
+          <bool>true</bool>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="pushButton_settings">
          <property name="text">
           <string/>
@@ -343,13 +366,13 @@ background-color: red;
            <property name="minimumSize">
             <size>
              <width>150</width>
-             <height>40</height>
+             <height>30</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>150</width>
-             <height>66</height>
+             <width>170</width>
+             <height>80</height>
             </size>
            </property>
            <property name="font">
@@ -407,13 +430,13 @@ background-color: red;
            <property name="minimumSize">
             <size>
              <width>150</width>
-             <height>40</height>
+             <height>30</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>150</width>
-             <height>65</height>
+             <width>170</width>
+             <height>80</height>
             </size>
            </property>
            <property name="font">
@@ -486,13 +509,13 @@ background-color: red;
            <property name="minimumSize">
             <size>
              <width>150</width>
-             <height>40</height>
+             <height>30</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>150</width>
-             <height>65</height>
+             <width>170</width>
+             <height>80</height>
             </size>
            </property>
            <property name="font">
@@ -545,7 +568,7 @@ background-color: red;
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item row="6" column="1">
           <spacer name="verticalSpacer_3">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -569,13 +592,13 @@ background-color: red;
            <property name="minimumSize">
             <size>
              <width>150</width>
-             <height>40</height>
+             <height>30</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>150</width>
-             <height>66</height>
+             <width>170</width>
+             <height>80</height>
             </size>
            </property>
            <property name="font">
@@ -622,6 +645,55 @@ background-color: red;
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_total_distance">
+           <property name="font">
+            <font>
+             <family>Mongolian Baiti</family>
+             <pointsize>14</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>total</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QLCDNumber" name="lcd_total">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>150</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>170</width>
+             <height>80</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="lineWidth">
+            <number>2</number>
+           </property>
+           <property name="digitCount">
+            <number>8</number>
            </property>
           </widget>
          </item>

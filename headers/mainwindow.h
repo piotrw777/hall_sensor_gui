@@ -13,6 +13,7 @@
 #include "thread_inc.h"
 #include "unitchanger.h"
 #include "button.h"
+#include "value_double.h"
 
 #define ORGANIZATION_NAME "Peter"
 #define ORGANIZATION_DOMAIN "www.com"
@@ -51,6 +52,7 @@ private:
     int edit_state;
     QTimer * timer_radius_up;
     QTimer * timer_radius_down;
+    value_double total;
 
 private slots:
     void showDate();
