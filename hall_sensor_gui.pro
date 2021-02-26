@@ -28,6 +28,7 @@ CONFIG += c++11
 INCLUDEPATH += ./headers
 
 SOURCES += \
+    button.cpp \
     dialog.cpp \
     hall_sensor.cpp \
     led_kit.cpp \
@@ -36,9 +37,11 @@ SOURCES += \
     mainwindow.cpp \
     speedometer.cpp \
     thread_inc.cpp \
-    unitchanger.cpp
+    unitchanger.cpp \
+    value.cpp
 
 HEADERS += \
+    button.h \
     dialog.h \
     headers/buzzer.h \
     headers/element.h \
@@ -51,7 +54,8 @@ HEADERS += \
     headers/thread_inc.h \
     headers/timer.h \
     headers/speedometer.h \
-    headers/unitchanger.h
+    headers/unitchanger.h \
+    value.h
 
 LIBS += -L/usr/local/lib -lwiringPi
 FORMS += \

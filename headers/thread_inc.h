@@ -6,6 +6,7 @@
 #include "buzzer.h"
 #include "hall_sensor.h"
 #include "led_kit.h"
+#include "button.h"
 
 class MainWindow;
 
@@ -18,15 +19,16 @@ public:
     ~Thread_Inc(){exit();}
 
 private:
-
     Thread<led> threadA;
     Thread<buzzer> threadB;
     Thread<hall_sensor> threadC;
     Thread<led> threadD;
     Thread<led_kit> threadE;
+    Thread<button> threadF; //button left
+    Thread<button> threadG; //button right
+    Thread<button> threadH; //button main
 
 public slots:
-
     void startOrstopThreadA();
     void startOrstopThreadB();
     void startThreadB();
@@ -37,6 +39,12 @@ public slots:
     void startThreadE();
     void stopThreadE();
     void startOrstopThreadE();
+    void startThreadF();
+    void stopThreadF();
+    void startThreadG();
+    void stopThreadG();
+    void startThreadH();
+    void stopThreadH();
 
     void exit();
 };

@@ -2,9 +2,17 @@
 #define BUTTON_H
 
 #include <QObject>
+#include <QDebug>
 #include <wiringPi.h>
+/*
+ * #include <stdio.h>
+#include <stdlib.h>
+#include <wiringPi.h>
+#include <unistd.h>
+#include <iostream>
+*/
 
-class button : public QObject{
+class button : public QObject {
     Q_OBJECT
 private:
     int pin;
@@ -12,18 +20,17 @@ private:
 
 public:
     button(){}
-    button(int _pin): pin(_pin)
-        pinMode(_pin, INPUT);
-        pullUpDnControl(_pin, PUD_UP);
-        running = false;
-    }
-    ~button(){running = false;}
-    bool button_detected(){return digitalRead(pin) == LOW;}
-    void on();
-    void off(running = false;)
+    button(int);
 
-public signals:
+    ~button(){running = false;}
+    bool button_detected(){return digitalRead(pin) == HIGH;}
+    void on();
+    void off(){running = false;}
+
+signals:
     void button_pressed();
+    void long_press();
+    void stop_long_press();
 };
 
 #endif // LED.H

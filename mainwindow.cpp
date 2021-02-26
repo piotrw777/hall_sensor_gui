@@ -31,8 +31,9 @@ int element::liczba_elementow = 0;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    thread_inc()
-    //unitchgr()
+    thread_inc() ,
+    edit_state(0)
+
 {
     ui->setupUi(this);
 
@@ -95,8 +96,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
                     ui->speedmeter, SLOT(change_unitNr(int)));
 
+    //main button
+    QObject::connect(thread_inc.threadH.elem, SIGNAL(button_pressed()), this, SLOT(next_edit_state()));
+
     thread_inc.startOrstopThreadA(); //yellow lamp
     thread_inc.startOrstopThreadC(); //hall_sensor
+    thread_inc.startThreadF();       //left button start
+    thread_inc.startThreadG();       //right button start
+    thread_inc.startThreadH();       //main button start
+
     LoadSettings();
 }
 
@@ -166,15 +174,70 @@ void MainWindow::startDialog()
     QObject::connect(mydialog, &Dialog::stepChanged, ui->speedmeter, &speedometer::setStep);
     QObject::connect(this, &MainWindow::send_data_to_dialog, mydialog, &Dialog::setPresentValues);
 
+    //button connections
+    QObject::connect(thread_inc.threadF.elem, SIGNAL(button_pressed()), &mydialog->left_button_counter, SLOT(increaseValue()));
+    QObject::connect(thread_inc.threadG.elem, SIGNAL(button_pressed()), &mydialog->right_button_counter, SLOT(increaseValue()));
+    QObject::connect(thread_inc.threadH.elem, SIGNAL(button_pressed()), &mydialog->main_button_counter, SLOT(increaseValue()));
+
     mydialog->setModal(false);
     mydialog->show();
     mydialog->activateWindow();
+
     int angle_tmp = ui->speedmeter->getAngle();
     int maxSpeed_tmp = ui->speedmeter->getMax_speed();
     int step_tmp = ui->speedmeter->getStep();
     emit send_data_to_dialog(angle_tmp, maxSpeed_tmp, step_tmp);
 }
+
 void MainWindow::on_pushButton_settings_clicked()
 {
     startDialog();
 }
+
+void MainWindow::next_edit_state()
+{
+    edit_state = (edit_state + 1) % 3;
+    switch (edit_state)
+    {
+    case 0:
+        ui->spinBox_radius->setDisabled(1);
+        ui->comboBox->setDisabled(1);
+        QObject::disconnect(thread_inc.threadF.elem, SIGNAL(button_pressed()), this, SLOT(prev_unit()));
+        QObject::disconnect(thread_inc.threadG.elem, SIGNAL(button_pressed()), this, SLOT(next_unit()));
+        break;
+    case 1:
+        ui->spinBox_radius->setEnabled(1);
+        QObject::connect(thread_inc.threadF.elem, SIGNAL(button_pressed()), ui->spinBox_radius, SLOT(stepDown()));
+        QObject::connect(thread_inc.threadG.elem, SIGNAL(button_pressed()), ui->spinBox_radius, SLOT(stepUp()));
+        break;
+    case 2:
+        ui->spinBox_radius->setDisabled(1);
+        ui->comboBox->setEnabled(1);
+        QObject::disconnect(thread_inc.threadF.elem, SIGNAL(button_pressed()), ui->spinBox_radius, SLOT(stepDown()));
+        QObject::disconnect(thread_inc.threadG.elem, SIGNAL(button_pressed()), ui->spinBox_radius, SLOT(stepUp()));
+        QObject::connect(thread_inc.threadF.elem, SIGNAL(button_pressed()), this, SLOT(prev_unit()));
+        QObject::connect(thread_inc.threadG.elem, SIGNAL(button_pressed()), this, SLOT(next_unit()));
+        break;
+    }
+    emit edit_stateChanged(edit_state);
+}
+
+void MainWindow::prev_unit()
+{
+    int unit = ui->comboBox->currentIndex();
+    unit = (unit + 2) % 3;
+    ui->comboBox->setCurrentIndex(unit);
+}
+
+void MainWindow::next_unit()
+{
+    int unit = ui->comboBox->currentIndex();
+    unit = (unit + 1) % 3;
+    ui->comboBox->setCurrentIndex(unit);
+}
+
+//void MainWindow::increase_radius()
+//{
+////    int present_value = ui->spinBox_radius->value();
+////    ui->spinBox_radius->stepUp()
+//}

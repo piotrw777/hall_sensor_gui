@@ -2,13 +2,22 @@
 #include <iostream>
 #include "thread_inc.h"
 
+#define pin_buzzer 27
+#define pin_left_button 9
+#define pin_right_button 10
+#define pin_main_button 11
+#define pin_blue_led 26
+
 Thread_Inc::Thread_Inc() : threadA(12)
-  , threadB(27)  //buzzer
+  , threadB(pin_buzzer)  //buzzer
   , threadC(nullptr) //hall_sensor
-  , threadD(26)     //blue led
+  , threadD(pin_blue_led)     //blue led
   , threadE(7, vector<int>{16,20,21, 23, 24, 25, 15})
+  , threadF(pin_left_button)
+  , threadG(pin_right_button)
+  , threadH(pin_main_button)
 {
-    cout << "Pracuje konstruktor domyslny dla Thread_Inc\n";
+    qDebug() << "Pracuje konstruktor domyslny dla Thread_Inc\n";
 }
 
 void Thread_Inc::startThreadB()
@@ -36,6 +45,38 @@ void Thread_Inc::stopThreadE()
 {
     threadE.stop();
 }
+void Thread_Inc::startThreadF()
+{
+    qDebug() << "threadF starts";
+    threadF.start();
+}
+void Thread_Inc::stopThreadF()
+{
+    threadF.stop();
+    qDebug() << "threadF stopped";
+}
+//G
+void Thread_Inc::startThreadG()
+{
+    qDebug() << "threadG starts";
+    threadG.start();
+}
+void Thread_Inc::stopThreadG()
+{
+    threadG.stop();
+    qDebug() << "threadG stopped";
+}
+//H
+void Thread_Inc::startThreadH()
+{
+    qDebug() << "threadH starts";
+    threadH.start();
+}
+void Thread_Inc::stopThreadH()
+{
+    threadH.stop();
+    qDebug() << "threadH stopped";
+}
 void Thread_Inc::startOrstopThreadA()
 {
     if(threadA.is_active())
@@ -54,12 +95,12 @@ void Thread_Inc::startOrstopThreadB()
 {
     if(threadB.is_active())
     {
-        cout << "ThreadB stops\n";
+        qDebug()  << "ThreadB stops\n";
         threadB.stop();
     }
     else
     {
-        cout << "ThreadB starts\n";
+        qDebug()  << "ThreadB starts\n";
         threadB.start();
     }
 }
@@ -93,17 +134,23 @@ void Thread_Inc::startOrstopThreadE()
 }
 void Thread_Inc::exit()
 {
-    cout << "Exit";
+    qDebug() << "Exit";
     threadA.stop();
     threadB.stop();
     threadC.stop();
     threadD.stop();
     threadE.stop();
+    threadF.stop();
+    threadG.stop();
+    threadH.stop();
 
     threadA.wait();
     threadB.wait();
     threadC.wait();
     threadD.wait();
     threadE.wait();
-    cout << "Wyjscie z programu\n";
+    threadF.wait();
+    threadG.wait();
+    threadH.wait();
+    qDebug()  << "All threads stopped";
 }

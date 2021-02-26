@@ -2,6 +2,7 @@
 #define DIALOG_H
 
 #include <QDialog>
+#include "value.h"
 
 namespace Ui {
 class Dialog;
@@ -44,6 +45,11 @@ private:
     int angle;
     int maxSpeed;
     int step;
+
+public:
+    value left_button_counter;
+    value right_button_counter;
+    value main_button_counter;
 };
 
 #endif // DIALOG_H
