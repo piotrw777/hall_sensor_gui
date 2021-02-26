@@ -9,12 +9,23 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>559</width>
-    <height>377</height>
+    <width>352</width>
+    <height>205</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Settings</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog#Dialog
+{
+background:  qlineargradient(spread:repeat, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(161, 161, 248, 255), stop:0.730769 rgba(0, 77, 170, 255), stop:1 rgba(101, 158, 255, 255))
+
+}
+*
+{
+color: black;
+}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -67,22 +78,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>left</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLCDNumber" name="lcd_left_button"/>
-       </item>
       </layout>
      </item>
      <item>
@@ -114,22 +109,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>right</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLCDNumber" name="lcd_right_button"/>
-       </item>
       </layout>
      </item>
      <item>
@@ -160,22 +139,6 @@
           <number>100</number>
          </property>
         </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>main</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLCDNumber" name="lcd_main_button"/>
        </item>
       </layout>
      </item>

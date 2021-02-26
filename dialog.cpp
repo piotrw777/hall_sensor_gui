@@ -10,10 +10,6 @@ Dialog::Dialog(QWidget *parent) :
     QObject::connect(ui->spinBox_MaxSpeed, SIGNAL(valueChanged(int)),this, SLOT(setMaxSpeed(int)));
     QObject::connect(ui->spinBox_Step, SIGNAL(valueChanged(int)),this, SLOT(setStep(int)));
     QObject::connect(this,&Dialog::rejected, this, &Dialog::restore_values);
-
-    QObject::connect(&left_button_counter, SIGNAL(valueChanged(int)), ui->lcd_left_button, SLOT(display(int)));
-    QObject::connect(&right_button_counter, SIGNAL(valueChanged(int)), ui->lcd_right_button, SLOT(display(int)));
-    QObject::connect(&main_button_counter, SIGNAL(valueChanged(int)), ui->lcd_main_button, SLOT(display(int)));
 }
 
 Dialog::~Dialog()
@@ -83,6 +79,9 @@ void Dialog::on_pushButton_OK_clicked()
 
 void Dialog::on_pushButton_Cancel_clicked()
 {
-
+    restore_values();
+    emit angleChanged(angle);
+    emit maxSpeedChanged(maxSpeed);
+    emit stepChanged(step);
     this->reject();
 }
