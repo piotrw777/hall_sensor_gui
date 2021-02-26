@@ -57,7 +57,6 @@ private slots:
     void next_edit_state();
     void prev_unit();
     void next_unit();
-    //void decrease_radius();
 };
 
 #endif // MAINWINDOW_H

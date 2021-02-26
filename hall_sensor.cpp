@@ -49,6 +49,8 @@ hall_sensor::hall_sensor(QObject *parent) : QObject(parent)
     unit_number = 0;
     qDebug() << "Promien ustawiony w konstruktorze!!!\n";
     perimeter = 2*pi*radius;
+    distance = 0;
+    t_average = 0;
     stop_time = 1500;  //msec
     update_time = 500;  //msec
     update_speed_time = 150; //msc
@@ -95,12 +97,11 @@ void hall_sensor::on()  {
     int magnet_c = 0; //licznik obrotow
     timer t1;
     timer t_off;
-    timer t_avg;
+    //timer t_avg;
     long long t_avg_pom = -1;
     QString t_avg_string;
     double t_emit = 0;
     double t_speed_emit = 0;
-    double t_average = 0;  //in miliseconds
 
     bool stat = false;
     bool no_magnet;
@@ -109,7 +110,7 @@ void hall_sensor::on()  {
 
     double t; //in miliseconds
     double speed;
-    long double distance(0); //in cm
+    //long double distance(0); //in cm
     int rpm;
 
     qDebug() << "Measure speed start" << endl;
@@ -201,6 +202,17 @@ void hall_sensor::on()  {
 void hall_sensor::change_unit(int newk)
 {
     unit_number = newk;
+}
+
+void hall_sensor::restart_trip()
+{
+    t_avg.restart();
+    distance = 0;
+    t_average = 0;
+    emit time_trip_change("0");
+    emit distance_change("0");
+    emit average_speed_change("0");
+    qDebug() << "trip restarted";
 }
 
 /*

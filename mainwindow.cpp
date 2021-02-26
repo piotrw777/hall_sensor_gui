@@ -98,7 +98,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //main button
     QObject::connect(thread_inc.threadH.elem, SIGNAL(button_pressed()), this, SLOT(next_edit_state()));
+    QObject::connect(thread_inc.threadH.elem, SIGNAL(button_long_press()), this, SLOT(close()));
 
+/*
+ *     void button_long_press();
+    void stop_long_press();
+ *
+ * */
     thread_inc.startOrstopThreadA(); //yellow lamp
     thread_inc.startOrstopThreadC(); //hall_sensor
     thread_inc.startThreadF();       //left button start
@@ -204,6 +210,7 @@ void MainWindow::next_edit_state()
         ui->comboBox->setDisabled(1);
         QObject::disconnect(thread_inc.threadF.elem, SIGNAL(button_pressed()), this, SLOT(prev_unit()));
         QObject::disconnect(thread_inc.threadG.elem, SIGNAL(button_pressed()), this, SLOT(next_unit()));
+        QObject::connect(thread_inc.threadF.elem, SIGNAL(button_long_press()),thread_inc.threadC.elem , SLOT(restart_trip()));
         break;
     case 1:
         ui->spinBox_radius->setEnabled(1);

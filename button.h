@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QDebug>
 #include <wiringPi.h>
+#include "timer.h"
+
 /*
  * #include <stdio.h>
 #include <stdlib.h>
@@ -14,9 +16,13 @@
 
 class button : public QObject {
     Q_OBJECT
+
 private:
     int pin;
     bool running;
+    bool pressed;
+    bool long_press;
+    timer tpress1;
 
 public:
     button(){}
@@ -29,7 +35,7 @@ public:
 
 signals:
     void button_pressed();
-    void long_press();
+    void button_long_press();
     void stop_long_press();
 };
 

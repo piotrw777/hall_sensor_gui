@@ -20,6 +20,9 @@ private:
     int delay_time; //msec
     double radius;  //w centymetrach
     long double perimeter; //w centymetrach
+    long double distance; //in cm
+    double t_average;  //in miliseconds
+    timer t_avg;
     int unit_number;
     double speed_coefficients[3];
     QVector< QString> speed_suffixes;
@@ -54,6 +57,7 @@ public slots:
     void off() {running = false;}
     void change_radius(int r) {radius = r/10.0; perimeter = 2*pi*radius;} //r in mm
     void change_unit(int newk);
+    void restart_trip();
 };
 
 #endif // HALL_SENSOR_H
