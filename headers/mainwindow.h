@@ -49,6 +49,8 @@ private:
     Ui::MainWindow *ui;
     Thread_Inc thread_inc;
     int edit_state;
+    QTimer * timer_radius_up;
+    QTimer * timer_radius_down;
 
 private slots:
     void showDate();
@@ -57,6 +59,10 @@ private slots:
     void next_edit_state();
     void prev_unit();
     void next_unit();
+    void start_radius_up();
+    void start_radius_down();
+    void stop_radius_up();
+    void stop_radius_down();
 };
 
 #endif // MAINWINDOW_H

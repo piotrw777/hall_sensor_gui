@@ -102,7 +102,6 @@ void hall_sensor::on()  {
     QString t_avg_string;
     double t_emit = 0;
     double t_speed_emit = 0;
-
     bool stat = false;
     bool no_magnet;
     bool magnet_post_detection;
@@ -178,7 +177,6 @@ void hall_sensor::on()  {
                     emit average_speed_change(QString::number((distance * 10 *speed_coefficients[unit_number] / t_average),'f',1)); //
                     emit distance_change(QString::number(distance/100*distance_coefficients[unit_number],'f',2)); // w m
                     emit rpm_change(rpm);
-
                 }
                 if(t_speed_emit > update_speed_time) {
                     t_speed_emit = 0;

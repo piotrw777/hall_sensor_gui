@@ -33,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     thread_inc() ,
     edit_state(0)
-
 {
     ui->setupUi(this);
 
@@ -49,6 +48,9 @@ MainWindow::MainWindow(QWidget *parent) :
     timer->start(1000);
     showDate();
 #endif
+    timer_radius_up = new QTimer(this);
+    timer_radius_down = new QTimer(this);
+
     //change speed
     QObject::connect(thread_inc.threadC.elem,
                     SIGNAL(speed_change(double)), ui->speedmeter, SLOT(changeValue(double)));
@@ -100,11 +102,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(thread_inc.threadH.elem, SIGNAL(button_pressed()), this, SLOT(next_edit_state()));
     QObject::connect(thread_inc.threadH.elem, SIGNAL(button_long_press()), this, SLOT(close()));
 
-/*
- *     void button_long_press();
-    void stop_long_press();
- *
- * */
     thread_inc.startOrstopThreadA(); //yellow lamp
     thread_inc.startOrstopThreadC(); //hall_sensor
     thread_inc.startThreadF();       //left button start
@@ -185,6 +182,8 @@ void MainWindow::startDialog()
     QObject::connect(thread_inc.threadG.elem, SIGNAL(button_pressed()), &mydialog->right_button_counter, SLOT(increaseValue()));
     QObject::connect(thread_inc.threadH.elem, SIGNAL(button_pressed()), &mydialog->main_button_counter, SLOT(increaseValue()));
 
+    //reset trip
+    QObject::connect(thread_inc.threadF.elem, SIGNAL(button_long_press()),thread_inc.threadC.elem , SLOT(restart_trip()));
     mydialog->setModal(false);
     mydialog->show();
     mydialog->activateWindow();
@@ -208,6 +207,10 @@ void MainWindow::next_edit_state()
     case 0:
         ui->spinBox_radius->setDisabled(1);
         ui->comboBox->setDisabled(1);
+        QObject::disconnect(thread_inc.threadF.elem, SIGNAL(button_long_press()), this, SLOT(start_radius_down()));
+        QObject::disconnect(thread_inc.threadF.elem, SIGNAL(stop_long_press()), this, SLOT(stop_radius_down()));
+        QObject::disconnect(thread_inc.threadG.elem, SIGNAL(button_long_press()), this, SLOT(start_radius_up()));
+        QObject::disconnect(thread_inc.threadG.elem, SIGNAL(stop_long_press()), this, SLOT(stop_radius_up()));
         QObject::disconnect(thread_inc.threadF.elem, SIGNAL(button_pressed()), this, SLOT(prev_unit()));
         QObject::disconnect(thread_inc.threadG.elem, SIGNAL(button_pressed()), this, SLOT(next_unit()));
         QObject::connect(thread_inc.threadF.elem, SIGNAL(button_long_press()),thread_inc.threadC.elem , SLOT(restart_trip()));
@@ -216,6 +219,12 @@ void MainWindow::next_edit_state()
         ui->spinBox_radius->setEnabled(1);
         QObject::connect(thread_inc.threadF.elem, SIGNAL(button_pressed()), ui->spinBox_radius, SLOT(stepDown()));
         QObject::connect(thread_inc.threadG.elem, SIGNAL(button_pressed()), ui->spinBox_radius, SLOT(stepUp()));
+        //change radius long presses
+        QObject::connect(thread_inc.threadF.elem, SIGNAL(button_long_press()), this, SLOT(start_radius_down()));
+        QObject::connect(thread_inc.threadF.elem, SIGNAL(stop_long_press()), this, SLOT(stop_radius_down()));
+        QObject::connect(thread_inc.threadG.elem, SIGNAL(button_long_press()), this, SLOT(start_radius_up()));
+        QObject::connect(thread_inc.threadG.elem, SIGNAL(stop_long_press()), this, SLOT(stop_radius_up()));
+
         break;
     case 2:
         ui->spinBox_radius->setDisabled(1);
@@ -224,6 +233,11 @@ void MainWindow::next_edit_state()
         QObject::disconnect(thread_inc.threadG.elem, SIGNAL(button_pressed()), ui->spinBox_radius, SLOT(stepUp()));
         QObject::connect(thread_inc.threadF.elem, SIGNAL(button_pressed()), this, SLOT(prev_unit()));
         QObject::connect(thread_inc.threadG.elem, SIGNAL(button_pressed()), this, SLOT(next_unit()));
+        //disconnect long presses
+        QObject::disconnect(thread_inc.threadF.elem, SIGNAL(button_long_press()), this, SLOT(start_radius_down()));
+        QObject::disconnect(thread_inc.threadF.elem, SIGNAL(stop_long_press()), this, SLOT(stop_radius_down()));
+        QObject::disconnect(thread_inc.threadG.elem, SIGNAL(button_long_press()), this, SLOT(start_radius_up()));
+        QObject::disconnect(thread_inc.threadG.elem, SIGNAL(stop_long_press()), this, SLOT(stop_radius_up()));
         break;
     }
     emit edit_stateChanged(edit_state);
@@ -243,8 +257,26 @@ void MainWindow::next_unit()
     ui->comboBox->setCurrentIndex(unit);
 }
 
-//void MainWindow::increase_radius()
-//{
-////    int present_value = ui->spinBox_radius->value();
-////    ui->spinBox_radius->stepUp()
-//}
+void MainWindow::start_radius_up()
+{
+    QObject::connect(timer_radius_up, &QTimer::timeout, ui->spinBox_radius,&QSpinBox::stepUp);
+    timer_radius_up->start(20);
+}
+
+void MainWindow::stop_radius_up()
+{
+    timer_radius_up->stop();
+    QObject::disconnect(timer_radius_up, &QTimer::timeout, ui->spinBox_radius,&QSpinBox::stepUp);
+}
+
+void MainWindow::start_radius_down()
+{
+    QObject::connect(timer_radius_down, &QTimer::timeout, ui->spinBox_radius,&QSpinBox::stepDown);
+    timer_radius_down->start(20);
+}
+void MainWindow::stop_radius_down()
+{
+    timer_radius_down->stop();
+    QObject::disconnect(timer_radius_down, &QTimer::timeout, ui->spinBox_radius,&QSpinBox::stepDown);
+}
+
