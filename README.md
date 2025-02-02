@@ -13,5 +13,6 @@ oprogramowanie: 	Raspbian Linux, QT Creator
 język programowania:	C++
 
 git:			https://github.com/piotrw777/hall_sensor_gui.git
+youtubelink: https://youtu.be/9P1dUyM2dHk
 
 opis:			Projekt licznika rowerowego obliczający prędkość, kadencję, prędkość średnią, czas jazdy, dystans. 
