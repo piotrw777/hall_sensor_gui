@@ -5,6 +5,8 @@
 **Data:** 3.02.2021  
 **Autor:** Piotr Wasilewski  
 
+![.](preview.png)
+
 ## Platforma  
 - **Sprzęt:** Raspberry Pi 4 Model B  
 - **Osprzęt:**  
