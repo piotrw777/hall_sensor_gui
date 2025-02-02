@@ -1,18 +1,31 @@
-Projekt licznika rowerowego na zalicznie studiów Programowanie z elementami systemów wbudowanych
+# Projekt licznika rowerowego  
 
-data: 			3.02.2021
+**Na zaliczenie przedmiotu:** Programowanie z elementami systemów wbudowanych  
 
-autor: 			Piotr Wasilewski
+**Data:** 3.02.2021  
+**Autor:** Piotr Wasilewski  
 
-platforma: 		Raspberry Pi 4 model B
+## Platforma  
+- **Sprzęt:** Raspberry Pi 4 Model B  
+- **Osprzęt:**  
+  - Czujnik Halla A3144  
+  - Diody LED  
+  - Głośniczek  
+  - Przycisk  
 
-osprzęt: 		czujnik Halla A3144, diody led, głośniczek, przycisk
+## Oprogramowanie  
+- **System operacyjny:** Raspbian Linux  
+- **Środowisko programistyczne:** Qt Creator  
+- **Język programowania:** C++  
 
-oprogramowanie: 	Raspbian Linux, QT Creator
+## Repozytorium i prezentacja  
+- **GitHub:** [hall_sensor_gui](https://github.com/piotrw777/hall_sensor_gui.git)  
+- **YouTube:** [Prezentacja projektu](https://youtu.be/9P1dUyM2dHk)  
 
-język programowania:	C++
-
-git:			https://github.com/piotrw777/hall_sensor_gui.git
-youtubelink: https://youtu.be/9P1dUyM2dHk
-
-opis:			Projekt licznika rowerowego obliczający prędkość, kadencję, prędkość średnią, czas jazdy, dystans. 
+## Opis  
+Projekt licznika rowerowego, który oblicza:  
+- Prędkość  
+- Kadencję  
+- Prędkość średnią  
+- Czas jazdy  
+- Dystans  
